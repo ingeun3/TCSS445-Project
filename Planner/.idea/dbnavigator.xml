@@ -2,18 +2,18 @@
 <project version="4">
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="false" />
+    <value-preview-text-wrapping value="true" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
-    <show-object-properties value="false" />
+    <show-object-properties value="true" />
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="91f2cae0-65ee-4335-9b33-0407ebd90057">
-      <console name="myPlanner" type="STANDARD" schema="mysql" session="Main" />
+    <connection id="2525c3cf-4c85-4bc7-88c0-cd8c2b2321a7">
+      <console name="Planner" type="STANDARD" schema="mysql" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -22,26 +22,15 @@
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
   </component>
-  <component name="DBNavigator.Project.ExecutionManager">
-    <retain-sticky-names value="false" />
-  </component>
-  <component name="DBNavigator.Project.MethodExecutionManager">
-    <method-browser />
-    <execution-history>
-      <group-entries value="true" />
-      <execution-inputs />
-    </execution-history>
-    <argument-values-cache />
-  </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
     <filters />
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="91f2cae0-65ee-4335-9b33-0407ebd90057" active="true" signed="true">
+      <connection id="2525c3cf-4c85-4bc7-88c0-cd8c2b2321a7" active="true" signed="true">
         <database>
-          <name value="myPlanner" />
+          <name value="Planner" />
           <description value="" />
           <database-type value="MYSQL" />
           <config-type value="BASIC" />
@@ -57,7 +46,7 @@
           <tns-profile value="" />
           <type value="USER_PASSWORD" />
           <user value="root" />
-          <deprecated-pwd value="MTIzNGtoaW53aW4h" />
+          <deprecated-pwd value="SzNxaDdwbWcu" />
         </database>
         <properties>
           <auto-commit value="false" />
