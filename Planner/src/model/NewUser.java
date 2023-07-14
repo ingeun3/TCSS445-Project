@@ -2,9 +2,9 @@ package model;
 
 import java.sql.*;
 
-public class User {
+public class NewUser {
 
-    public User(String theUsername, String thePassword) {
+    public NewUser(String theUsername, String thePassword) {
         createUser(theUsername, thePassword);
     }
 
