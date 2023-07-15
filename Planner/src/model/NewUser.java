@@ -29,7 +29,7 @@ public class NewUser {
 
 
             // Insert the new user account
-            String insertQuery = "INSERT INTO users (username, password) VALUES (?,?)";
+            String insertQuery = "INSERT INTO "+ ServerData.USER_TABLE +" (username, password) VALUES (?,?)";
             PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
             insertStatement.setString(1, theUsername);
             insertStatement.setString(2, thePassword);

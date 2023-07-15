@@ -19,4 +19,36 @@ public class Controller {
 
 
 
+
+
+
+
+
+
+    //  getTitles(Ingeun)
+    //    -> Returns [390QUiz, SQLHW, AlgUnit2HW]             // We know the username and assignment titles
+
+    // Create EventButton Class {
+    //  myAssignmentID;
+    //  ...
+    //
+    //  for(String title : getTitle(Ingeun) {
+    //       int assignmentId = getAssignmentID(Ingeun, title);
+    //       getPrio(assignmentId);
+    //       getTime(assignmentId);
+    //       ...
+    //
+    //  }
+    // }
+
+    //  getAssignmentID(Ingeun, 390Quiz)
+    //    -> Returns AssignmentId                             // Now that we know the asssignment ID of this specific assignment,
+                                                              //    we can retrieve all the other datas.
+
+
+
+
+
+
+
 }
