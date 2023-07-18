@@ -14,34 +14,34 @@ public class Main {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        FormPanel formPanel = new FormPanel();
+        LoginPanel formPanel = new LoginPanel();
 
-        JButton saveButton = new JButton("Save");
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = formPanel.getUsername();
-                String password = formPanel.getPassword();
-                String professorName = formPanel.getProfessorName();
-
-                // Save username to MySQL database
-                saveToDatabase(username, "username_table");
-
-                // Save password to MySQL database
-                saveToDatabase(password, "password_table");
-
-                // Save professor name to MySQL database
-                saveToDatabase(professorName, "professor_table");
-
-                // Optional: Clear the form fields after saving
-                formPanel.getUsernameField().setText("");
-                formPanel.getPasswordField().setText("");
-                formPanel.getProfessorField().setText("");
-            }
-        });
+//        JButton saveButton = new JButton("Save");
+//        saveButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                String username = formPanel.getUsername();
+//                String password = formPanel.getPassword();
+//                String professorName = formPanel.getProfessorName();
+//
+//                // Save username to MySQL database
+//                saveToDatabase(username, "username_table");
+//
+//                // Save password to MySQL database
+//                saveToDatabase(password, "password_table");
+//
+//                // Save professor name to MySQL database
+//                saveToDatabase(professorName, "professor_table");
+//
+//                // Optional: Clear the form fields after saving
+//                formPanel.getUsernameField().setText("");
+//                formPanel.getPasswordField().setText("");
+//                formPanel.getProfessorField().setText("");
+//            }
+//        });
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(saveButton);
+//        buttonPanel.add(saveButton);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
         frame.add(formPanel, BorderLayout.CENTER);

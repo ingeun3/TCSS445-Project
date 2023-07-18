@@ -1,6 +1,28 @@
 package controller;
 
-public class Controller {
+import model.NewUser;
+import view.GUIFrame;
+import view.LoginPanel;
+
+import java.io.IOException;
+
+public class  Controller{
+    private GUIFrame myFrame;
+    private LoginPanel myLoginPanel;
+
+
+    public Controller() throws IOException {
+        myFrame = GUIFrame.getInstance();
+        myLoginPanel = new LoginPanel();
+
+        start();
+    }
+    public void start() {
+        myFrame.setCenter(myLoginPanel);
+
+    }
+
+
     // Gets the input from view code.
 
     // check if the user is logging in or making new account
