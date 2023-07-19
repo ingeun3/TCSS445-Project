@@ -47,8 +47,9 @@ public class GUIFrame extends JFrame {
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLocationRelativeTo(null);
             setVisible(true);
-            pack();
+//            pack();
         }
+
 
         /**
          * Delete the Panel in the NorthRegion of the GameFrame

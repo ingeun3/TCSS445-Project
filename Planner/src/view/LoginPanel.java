@@ -2,10 +2,16 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LoginPanel extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
+
+    private boolean myOkayPressed;
+
+    private boolean myCreateAccountPressed;
 
     public LoginPanel() {
         setLayout(new GridBagLayout());
@@ -14,14 +20,33 @@ public class LoginPanel extends JPanel {
         constraints.insets = new Insets(10, 10, 10, 10);
 
         JLabel usernameLabel = new JLabel("Username:");
+        Font font = usernameLabel.getFont().deriveFont(20f);
+        usernameLabel.setFont(font);
+
         usernameField = new JTextField(20);
         JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setFont(font);
+
         passwordField = new JPasswordField(20);
         JButton okButton = new JButton("Ok");
+
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                myOkayPressed = true;
+            }
+        });
+
         JButton newLogin = new JButton("Create an account");
+        newLogin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                myCreateAccountPressed = true;
+            }
+        });
 
         // Set preferred size for labels to control their width
-        Dimension labelSize = new Dimension(100, 30);
+        Dimension labelSize = new Dimension(120, 30);
         usernameLabel.setPreferredSize(labelSize);
         passwordLabel.setPreferredSize(labelSize);
 
@@ -69,4 +94,16 @@ public class LoginPanel extends JPanel {
     public JPasswordField getPasswordField() {
         return passwordField;
     }
+
+    public boolean getOkayStatus() {
+        boolean temp = myOkayPressed;
+        myOkayPressed = false;
+        return temp;
+    }
+    public boolean getCreateAccountStatus() {
+        boolean temp = myCreateAccountPressed;
+        myCreateAccountPressed = false;
+        return temp;
+    }
+
 }

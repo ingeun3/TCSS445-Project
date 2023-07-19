@@ -8,7 +8,7 @@ public class NewUser {
         createUser(theUsername, thePassword);
     }
 
-    public void createUser(String theUsername, String thePassword) {
+    private void createUser(String theUsername, String thePassword) {
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             // Assuming the table name is "users" and the username column name is "username"
 
