@@ -13,6 +13,7 @@ public class CreateAccountPanel extends JPanel{
 
         private String myUsername;
 
+        private JButton myOkButton;
 
 
         public CreateAccountPanel() {
@@ -30,14 +31,14 @@ public class CreateAccountPanel extends JPanel{
             passwordLabel.setFont(font);
 
             passwordField = new JPasswordField(20);
-            JButton okButton = new JButton("Ok");
+            myOkButton =  new JButton("Ok");
 
-            okButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(final ActionEvent e) {
-                    myOkayPressed = true;
-                }
-            });
+//            myOkButton.addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(final ActionEvent e) {
+//                    myOkayPressed = true;
+//                }
+//            });
 
             // Set preferred size for labels to control their width
             Dimension labelSize = new Dimension(120, 30);
@@ -62,7 +63,7 @@ public class CreateAccountPanel extends JPanel{
             add(passwordField, constraints);
 
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-            buttonPanel.add(okButton);
+            buttonPanel.add(myOkButton);
 
             constraints.gridx = 0;
             constraints.gridy = 2;
@@ -88,8 +89,10 @@ public class CreateAccountPanel extends JPanel{
             return passwordField;
         }
 
+        public JButton getOkButton() {
+            return myOkButton;
+        }
     public boolean getOkayStatus() {
-            System.out.println("hi");
         boolean temp = myOkayPressed;
         myOkayPressed = false;
         return temp;

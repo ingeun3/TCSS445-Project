@@ -12,7 +12,8 @@ public class CreateEvent {
     private ArrayList<String> myEvent = new ArrayList<String>();
     private ArrayList<String> myEventDueDate = new ArrayList<String>();
 
-    public CreateEvent(String theUsername, String theTitle, String theProf, int thePrio, Date theDate, Time theStart, Time theEnd) {
+    public CreateEvent(String theUsername, String theTitle, String theProf, int thePrio, Date theDate, Time theStart, Time theEnd) throws ClassNotFoundException {
+        Class.forName("com.mysql.jdbc.Driver");
         myUsername = theUsername;
         myAssignmentID++;
 

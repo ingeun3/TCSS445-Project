@@ -3,17 +3,20 @@ package model;
 import java.sql.*;
 
 public class NewUser {
+    private int myOutput;
 
-    public NewUser(String theUsername, String thePassword) {
+    public NewUser(String theUsername, String thePassword) throws ClassNotFoundException {
         createUser(theUsername, thePassword);
     }
 
-    private void createUser(String theUsername, String thePassword) {
+    private void createUser(String theUsername, String thePassword) throws ClassNotFoundException {
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+
+
             // Assuming the table name is "users" and the username column name is "username"
 
             // Check if the username already exists
-            String checkQuery = "SELECT COUNT(*) FROM users WHERE username = ?";
+            String checkQuery = "SELECT COUNT(*) FROM user_table WHERE username = ?";
             PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
             checkStatement.setString(1, theUsername);
             ResultSet checkResultSet = checkStatement.executeQuery();
@@ -23,7 +26,7 @@ public class NewUser {
             int count = checkResultSet.getInt(1);
 
             if (count > 0) {
-                System.out.println("The username already exists.");
+                myOutput = 1;
                 return; // Stop the execution or perform appropriate action
             }
 
@@ -36,9 +39,9 @@ public class NewUser {
             int rowsAffected = insertStatement.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("User account created successfully!");
+                myOutput = 2;
             } else {
-                System.out.println("Failed to create user account.");
+                myOutput = 3;
             }
 
             insertStatement.close();
@@ -47,5 +50,8 @@ public class NewUser {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public int getMyOutput() {
+        return myOutput;
     }
 }

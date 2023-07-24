@@ -5,17 +5,18 @@ import java.sql.*;
 // User -> if username not exist, insert, else dont make change
 // event -> if username and password match, if not say "username or password not exist"
 public class Login {
-    private boolean myStatus;
+    private int myOutput;
 
-    public Login(String theUsername, String thePassword) {
+    public Login(String theUsername, String thePassword) throws ClassNotFoundException {
         signingIn(theUsername,thePassword);
     }
     public void signingIn(String theUsername, String thePassword){
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+         //   Class.forName("com.mysql.jdbc.Driver");
             // Assuming the table name is "users" and the username column name is "username"
 
             // Check if the username already exists
-            String checkQuery = "SELECT COUNT(*) FROM users WHERE username = ?, password = ?";
+            String checkQuery = "SELECT COUNT(*) FROM user_table WHERE username = ? AND password = ?";
             PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
             checkStatement.setString(1, theUsername);
             checkStatement.setString(2, thePassword);
@@ -25,10 +26,8 @@ public class Login {
 
             int count = checkResultSet.getInt(1);
 
-            if (count > 0) {
-                myStatus = true;
-            } else {
-                System.out.println("Username or password not existing");
+            if (count <= 0) {
+                myOutput = 1;
                 return;
             }
 
@@ -40,8 +39,8 @@ public class Login {
     }
     // This is going to get called by the controller class and the event class
 
-    public boolean isLoginSuccessful() {
-        return myStatus;
+    public int getMyOutput() {
+        return myOutput;
     }
 
 }

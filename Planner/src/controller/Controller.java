@@ -1,10 +1,12 @@
 package controller;
 
+import model.Login;
 import model.NewUser;
-import view.CreateAccountPanel;
-import view.GUIFrame;
-import view.LoginPanel;
+import view.*;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class  Controller{
@@ -12,45 +14,141 @@ public class  Controller{
     private static final int CREATE_ACCOUNT_PANEL = 1;
 
     private boolean myLoginFlag;
+
+    private boolean myMainPanelFlag;
+
+
     private boolean myCreateAccountFlag;
 
 //    private static final int LOGIN_PANEL = 1;
     private GUIFrame myFrame;
     private LoginPanel myLoginPanel;
 
+    private MainPanel myMainPanel;
+
     private CreateAccountPanel myCreateAccountPanel;
 
-    public Controller() throws IOException {
+    private MenuBar myMenuBar;
+
+    private int clicked;
+    public Controller() throws IOException, ClassNotFoundException {
         myFrame = GUIFrame.getInstance();
         myLoginPanel = new LoginPanel();
         myCreateAccountPanel = new CreateAccountPanel();
+        myMainPanel = new MainPanel();
         myLoginFlag = true;
-        NewUser newUser = new NewUser(myCreateAccountPanel.getUsername(), myCreateAccountPanel.getPassword());
+        myFrame.setCenter(myLoginPanel);
+        myMenuBar = new MenuBar();
 
+        clicked = 1;
         start();
     }
     public void start() {
-        myFrame.setCenter(myLoginPanel);
-        while(true) {
-            if(myLoginFlag) {
-                System.out.println();
-                if(myLoginPanel.getCreateAccountStatus() == true) {
-                    myLoginFlag = false;
 
-                    myFrame.setCenter(myCreateAccountPanel);
-                    myCreateAccountFlag = true;
-                }
-            } else if (myCreateAccountFlag) {
-                System.out.println();
-                if(myCreateAccountPanel.getOkayStatus() == true) {
-                    System.out.println("1324567");
-                    //NewUser newUser = new NewUser(myCreateAccountPanel.getUsername(), myCreateAccountPanel.getPassword());
-                   // System.out.println(myCreateAccountPanel.getUsername());
 
+        // Add ActionListener to the "Ok" button in LoginPanel
+        myLoginPanel.getOkButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Login login = new Login(myLoginPanel.getUsername(), myLoginPanel.getPassword());
+                    if (clicked % 2 == 1) {
+                        if (login.getMyOutput() == 1) {
+                            JOptionPane.showMessageDialog(myFrame,
+                                    "Username or password not existing");
+                        }
+                        clicked++;
+
+                    } else {
+                        clicked++;
+                    }
+
+                    myLoginPanel.getOkButton().removeAll();
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
+        });
 
-        }
+        myLoginPanel.getCreateNewButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform Login action here when the "Ok" button is clicked
+                myLoginFlag = false;
+                myFrame.setCenter(myCreateAccountPanel);
+                myCreateAccountFlag = true;
+                myLoginPanel.getCreateNewButton().removeAll();
+            }
+        });
+
+        myLoginPanel.getOkButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform Login action here when the "Ok" button is clicked
+                if (clicked % 2 == 1) {
+                    myLoginFlag = false;
+                    myFrame.setCenter(myMainPanel);
+
+                    myLoginPanel.getOkButton().removeAll();
+                    myFrame.setJMenuBar(myMenuBar);
+                    myMainPanelFlag = true;
+                    clicked++;
+                } else {
+                    clicked++;
+                }
+                myLoginPanel.getOkButton().removeAll();
+            }
+        });
+
+
+        // Add ActionListener to the "Ok" button in CreateAccountPanel
+        myCreateAccountPanel.getOkButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform NewUser action here when the "Ok" button is clicked
+
+                try {
+                    NewUser newUser = new NewUser(myCreateAccountPanel.getUsername(), myCreateAccountPanel.getPassword());
+                    if (clicked % 2 == 1) {
+                        if (newUser.getMyOutput() == 1) {
+                            JOptionPane.showMessageDialog(myFrame,
+                                    "Username already exist!");
+                        } else if (newUser.getMyOutput() == 2) {
+                            JOptionPane.showMessageDialog(myFrame,
+                                    "Account created successfully!");
+                        } else {
+                            JOptionPane.showMessageDialog(myFrame,
+                                    "Account failed to create");
+                        }
+                        clicked++;
+
+                    } else {
+                        clicked++;
+                    }
+
+                    myCreateAccountPanel.getOkButton().removeAll();
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+            }
+        });
+
+//        while (true) {
+//            if (myLoginFlag) {
+//                if (myLoginPanel.getCreateAccountStatus()) {
+//                    myLoginFlag = false;
+//                    myFrame.setCenter(myCreateAccountPanel);
+//                    myCreateAccountFlag = true;
+//                }
+//            } else if (myCreateAccountFlag) {
+//                if (myCreateAccountPanel.getOkayStatus()) {
+//                    myCreateAccountFlag = false;
+//                    myFrame.setCenter(myLoginPanel);
+//                    myLoginFlag = true;
+//                }
+//            }
+//        }
     }
 
 

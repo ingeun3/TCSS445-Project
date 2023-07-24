@@ -13,6 +13,10 @@ public class LoginPanel extends JPanel {
 
     private boolean myCreateAccountPressed;
 
+    private JButton myOkButton;
+
+    private JButton myCreateNewButton;
+
     public LoginPanel() {
         setLayout(new GridBagLayout());
 
@@ -28,22 +32,8 @@ public class LoginPanel extends JPanel {
         passwordLabel.setFont(font);
 
         passwordField = new JPasswordField(20);
-        JButton okButton = new JButton("Ok");
-
-        okButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                myOkayPressed = true;
-            }
-        });
-
-        JButton newLogin = new JButton("Create an account");
-        newLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                myCreateAccountPressed = true;
-            }
-        });
+        myOkButton = new JButton("Ok");
+        myCreateNewButton = new JButton("Create an account");
 
         // Set preferred size for labels to control their width
         Dimension labelSize = new Dimension(120, 30);
@@ -68,8 +58,8 @@ public class LoginPanel extends JPanel {
         add(passwordField, constraints);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        buttonPanel.add(newLogin);
-        buttonPanel.add(okButton);
+        buttonPanel.add(myCreateNewButton);
+        buttonPanel.add(myOkButton);
 
         constraints.gridx = 0;
         constraints.gridy = 2;
@@ -104,6 +94,12 @@ public class LoginPanel extends JPanel {
         boolean temp = myCreateAccountPressed;
         myCreateAccountPressed = false;
         return temp;
+    }
+    public JButton getOkButton() {
+        return myOkButton;
+    }
+    public JButton getCreateNewButton() {
+        return myCreateNewButton;
     }
 
 }
