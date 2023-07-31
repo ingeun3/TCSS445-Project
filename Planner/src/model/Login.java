@@ -5,9 +5,10 @@ import java.sql.*;
 // User -> if username not exist, insert, else dont make change
 // event -> if username and password match, if not say "username or password not exist"
 public class Login {
-    private int myOutput;
+    private boolean doesNotExist;
 
     public Login(String theUsername, String thePassword) throws ClassNotFoundException {
+        doesNotExist = false;
         signingIn(theUsername,thePassword);
     }
     public void signingIn(String theUsername, String thePassword){
@@ -26,8 +27,8 @@ public class Login {
 
             int count = checkResultSet.getInt(1);
 
-            if (count <= 0) {
-                myOutput = 1;
+            if (count == 0) {
+                doesNotExist = true;
                 return;
             }
 
@@ -39,8 +40,8 @@ public class Login {
     }
     // This is going to get called by the controller class and the event class
 
-    public int getMyOutput() {
-        return myOutput;
+    public boolean getMyOutput() {
+        return doesNotExist;
     }
 
 }

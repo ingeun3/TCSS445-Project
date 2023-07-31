@@ -3,8 +3,10 @@ package controller;
 import model.Login;
 import model.NewUser;
 import view.*;
+import view.MenuBar;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -24,7 +26,7 @@ public class  Controller{
     private GUIFrame myFrame;
     private LoginPanel myLoginPanel;
 
-    private MainPanel myMainPanel;
+    private DisplayPanel myMainPanel;
 
     private CreateAccountPanel myCreateAccountPanel;
 
@@ -35,7 +37,11 @@ public class  Controller{
         myFrame = GUIFrame.getInstance();
         myLoginPanel = new LoginPanel();
         myCreateAccountPanel = new CreateAccountPanel();
-        myMainPanel = new MainPanel();
+        Object[][] temp = {
+                {"Unit 4 assignment","July 31, 2023", 4, "Tom Capaul", 0,0, false}
+        };
+
+        myMainPanel = new DisplayPanel(temp);
         myLoginFlag = true;
         myFrame.setCenter(myLoginPanel);
         myMenuBar = new MenuBar();
@@ -45,30 +51,6 @@ public class  Controller{
     }
     public void start() {
 
-
-        // Add ActionListener to the "Ok" button in LoginPanel
-        myLoginPanel.getOkButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    Login login = new Login(myLoginPanel.getUsername(), myLoginPanel.getPassword());
-                    if (clicked % 2 == 1) {
-                        if (login.getMyOutput() == 1) {
-                            JOptionPane.showMessageDialog(myFrame,
-                                    "Username or password not existing");
-                        }
-                        clicked++;
-
-                    } else {
-                        clicked++;
-                    }
-
-                    myLoginPanel.getOkButton().removeAll();
-                } catch (ClassNotFoundException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
 
         myLoginPanel.getCreateNewButton().addActionListener(new ActionListener() {
             @Override
@@ -86,13 +68,30 @@ public class  Controller{
             public void actionPerformed(ActionEvent e) {
                 // Perform Login action here when the "Ok" button is clicked
                 if (clicked % 2 == 1) {
-                    myLoginFlag = false;
-                    myFrame.setCenter(myMainPanel);
+                    Login login;
+                    try {
+                        login = new Login(myLoginPanel.getUsername(), myLoginPanel.getPassword());
+                    } catch (ClassNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    if (login.getMyOutput() == true) {
+                        JOptionPane.showMessageDialog(myFrame,
+                                "Username or password not existing");
+                    } else {
+                        myLoginFlag = false;
 
-                    myLoginPanel.getOkButton().removeAll();
-                    myFrame.setJMenuBar(myMenuBar);
-                    myMainPanelFlag = true;
-                    clicked++;
+                        JScrollPane scrollPane = new JScrollPane(myMainPanel);
+                     //   frame.add(scrollPane, BorderLayout.CENTER);
+                        myFrame.setCenter(scrollPane);
+
+                        myLoginPanel.getOkButton().removeAll();
+                        myFrame.setJMenuBar(myMenuBar);
+                        myMainPanelFlag = true;
+
+
+
+                        clicked++;
+                    }
                 } else {
                     clicked++;
                 }

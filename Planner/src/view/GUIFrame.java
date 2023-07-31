@@ -15,7 +15,7 @@ public class GUIFrame extends JFrame {
         /**
          * Initialize the CenterPanel Object.
          */
-        private JPanel myCenterPanel;
+        private JComponent myCenterPanel;
 
         /**
          * Private constructor of the GameInterface (main GUI).
@@ -77,7 +77,7 @@ public class GUIFrame extends JFrame {
          * Adds JPanel to the Center region of the GameFrame.
          * @param thePanel the Panel that will be added to the Center of the JFrame.
          */
-        public void setCenter(final JPanel thePanel) {
+        public void setCenter(final JComponent thePanel) {
             getContentPane().remove(myCenterPanel);
             myCenterPanel = thePanel;
             revalidate();
