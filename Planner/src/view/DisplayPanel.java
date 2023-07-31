@@ -8,6 +8,10 @@ import java.awt.event.ActionListener;
 
 public class DisplayPanel extends JTable {
     private JButton myDeleteButton;
+    private JTable myTable;
+
+    private JScrollPane myScrollPane;
+
     public DisplayPanel(Object[][] SQLData) {
         super();
         String[] columnNames = {"Title", "Due Date", "Priority", "Professor", "Start", "End", "Complete"};
@@ -19,32 +23,16 @@ public class DisplayPanel extends JTable {
                 return column == 2;
             }
         };
+        myTable = new JTable(model);
+        myScrollPane = new JScrollPane(myTable);
         myDeleteButton = new JButton("Delete Selected Row");
-        start(model);
+
     }
-    private void start(DefaultTableModel model) {
 
-
-       // JTable table = new JTable(model);
-   //     JScrollPane scrollPane = new JScrollPane(table);
-
-
-//        frame.add(scrollPane, BorderLayout.CENTER);
-//
-//
-//        deleteButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                int selectedRow = table.getSelectedRow();
-//                if (selectedRow != -1) {
-//                    model.removeRow(selectedRow);
-//                } else {
-//                    JOptionPane.showMessageDialog(frame, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
-//                }
-//            }
-//        });
-    }
     public JButton getDeleteButton (){
         return myDeleteButton;
+    }
+    public JScrollPane getMyScrollPane() {
+        return myScrollPane;
     }
 }

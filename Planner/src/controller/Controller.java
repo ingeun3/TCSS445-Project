@@ -79,16 +79,10 @@ public class  Controller{
                                 "Username or password not existing");
                     } else {
                         myLoginFlag = false;
-
-                        JScrollPane scrollPane = new JScrollPane(myMainPanel);
-                     //   frame.add(scrollPane, BorderLayout.CENTER);
-                        myFrame.setCenter(scrollPane);
-
+                        myFrame.setCenter(myMainPanel.getMyScrollPane());
                         myLoginPanel.getOkButton().removeAll();
                         myFrame.setJMenuBar(myMenuBar);
                         myMainPanelFlag = true;
-
-
 
                         clicked++;
                     }
