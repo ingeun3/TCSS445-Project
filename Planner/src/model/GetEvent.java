@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class GetEvent {
     private ArrayList<String> myEventTitles = new ArrayList<String>();
+    private ArrayList<Object[]> res = new ArrayList<>();
+
 
     public ArrayList<String> getTitle(String theUsername) throws ClassNotFoundException {
 
@@ -114,5 +116,36 @@ public class GetEvent {
         return res;
     }
 
+    public ArrayList<Object[]> getAll() throws SQLException {
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            Statement statement = connection.createStatement();
+            String query = "SELECT * FROM " + ServerData.USER_TABLE + " NATURAL JOIN " + ServerData.EVENT_TABLE + " " +
+                    ServerData.EVENT_TABLE + " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " "  +
+                    ServerData.ASSIGNMENT_DETAIL_TABLE + " NATURAL JOIN " + ServerData.PROF_TABLE + " "  +
+                    ServerData.PROF_TABLE + " NATURAL JOIN " + ServerData.TIME_TABLE;
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                String title = resultSet.getString("title");
+                Date dueDate = resultSet.getDate("due_date");
+                int priority = resultSet.getInt("prio");
+                String professorF = resultSet.getString("Fname");
+                String professorL = resultSet.getString("Lname");
+                Time start = resultSet.getTime("start_time");
+                Time end = resultSet.getTime("end_time");
+                boolean complete = resultSet.getBoolean("completed");
+
+                // Create an array to store the current row's data
+                Object[] rowData = {title, dueDate, priority, professorF, professorL, start, end, complete};
+
+                // Add the array to the ArrayList
+                res.add(rowData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
 
 }

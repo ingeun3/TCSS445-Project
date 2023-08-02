@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class DisplayPanel extends JTable {
     private JButton myDeleteButton;
@@ -12,10 +13,19 @@ public class DisplayPanel extends JTable {
 
     private JScrollPane myScrollPane;
 
-    public DisplayPanel(Object[][] SQLData) {
+
+
+    public DisplayPanel(ArrayList<Object[]> SQLData) {
         super();
-        String[] columnNames = {"Title", "Due Date", "Priority", "Professor", "Start", "End", "Complete"};
-        DefaultTableModel model = new DefaultTableModel(SQLData, columnNames) {
+        String[] columnNames = {"Title", "Due Date", "Priority", "Professor First Name", "Professor Last Name", "Start", "End", "Complete"};
+
+        // Convert the ArrayList to a 2D array
+        Object[][] data = new Object[SQLData.size()][];
+        for (int i = 0; i < SQLData.size(); i++) {
+            data[i] = SQLData.get(i);
+        }
+
+        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
             // Override isCellEditable to selectively make cells editable
             @Override
             public boolean isCellEditable(int row, int column) {

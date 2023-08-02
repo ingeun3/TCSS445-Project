@@ -77,24 +77,24 @@ public class LoginPanel extends JPanel {
         return new String(passwordField.getPassword());
     }
 
-    public JTextField getUsernameField() {
-        return usernameField;
-    }
-
-    public JPasswordField getPasswordField() {
-        return passwordField;
-    }
-
-    public boolean getOkayStatus() {
-        boolean temp = myOkayPressed;
-        myOkayPressed = false;
-        return temp;
-    }
-    public boolean getCreateAccountStatus() {
-        boolean temp = myCreateAccountPressed;
-        myCreateAccountPressed = false;
-        return temp;
-    }
+//    public JTextField getUsernameField() {
+//        return usernameField;
+//    }
+//
+//    public JPasswordField getPasswordField() {
+//        return passwordField;
+//    }
+//
+//    public boolean getOkayStatus() {
+//        boolean temp = myOkayPressed;
+//        myOkayPressed = false;
+//        return temp;
+//    }
+//    public boolean getCreateAccountStatus() {
+//        boolean temp = myCreateAccountPressed;
+//        myCreateAccountPressed = false;
+//        return temp;
+//    }
     public JButton getOkButton() {
         return myOkButton;
     }

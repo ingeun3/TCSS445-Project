@@ -1,5 +1,6 @@
 package controller;
 
+import model.GetEvent;
 import model.Login;
 import model.NewUser;
 import view.*;
@@ -10,6 +11,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class  Controller{
     private static final int LOGIN_PANEL = 0;
@@ -30,18 +33,21 @@ public class  Controller{
 
     private CreateAccountPanel myCreateAccountPanel;
 
+    private ArrayList<Object[]> myData;
+
     private MenuBar myMenuBar;
 
     private int clicked;
-    public Controller() throws IOException, ClassNotFoundException {
+    public Controller() throws IOException, ClassNotFoundException, SQLException {
         myFrame = GUIFrame.getInstance();
         myLoginPanel = new LoginPanel();
         myCreateAccountPanel = new CreateAccountPanel();
-        Object[][] temp = {
-                {"Unit 4 assignment","July 31, 2023", 4, "Tom Capaul", 0,0, false}
-        };
 
-        myMainPanel = new DisplayPanel(temp);
+        //myMainPanel = new DisplayPanel();
+        myData = new GetEvent().getAll();
+
+        myMainPanel = new DisplayPanel(myData);
+
         myLoginFlag = true;
         myFrame.setCenter(myLoginPanel);
         myMenuBar = new MenuBar();
@@ -49,8 +55,14 @@ public class  Controller{
         clicked = 1;
         start();
     }
-    public void start() {
 
+    public void start() {
+        myMenuBar.getMyAddButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new EventCreator();
+            }
+        });
 
         myLoginPanel.getCreateNewButton().addActionListener(new ActionListener() {
             @Override
@@ -83,6 +95,8 @@ public class  Controller{
                         myLoginPanel.getOkButton().removeAll();
                         myFrame.setJMenuBar(myMenuBar);
                         myMainPanelFlag = true;
+
+
 
                         clicked++;
                     }
@@ -127,6 +141,11 @@ public class  Controller{
             }
         });
 
+
+
+
+
+
 //        while (true) {
 //            if (myLoginFlag) {
 //                if (myLoginPanel.getCreateAccountStatus()) {
@@ -142,6 +161,8 @@ public class  Controller{
 //                }
 //            }
 //        }
+
+
     }
 
 
