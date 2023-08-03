@@ -2,20 +2,20 @@ package view;
 
 import javax.swing.*;
 
-public class MenuBar extends JMenuBar{
-    private JMenu myAddButton;
-    private JMenu myDeleteButton;
-    private JMenu myEditButton;
+public class MenuBar extends JPanel{
+    private JButton myAddButton;
+    private JButton myDeleteButton;
+    private JButton myEditButton;
     public MenuBar (){
-        myAddButton = new JMenu("Add");
-        myDeleteButton = new JMenu("Delete");
-        myEditButton = new JMenu("Edit");
+        myAddButton = new JButton("Add");
+        myDeleteButton = new JButton("Delete");
+        myEditButton = new JButton("Edit");
         add(myAddButton);
         add(myDeleteButton);
         add(myEditButton);
     }
 
-    public JMenu getMyAddButton() {
+    public JButton getMyAddButton() {
         return myAddButton;
     }
 

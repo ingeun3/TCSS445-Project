@@ -65,7 +65,7 @@ public class GUIFrame extends JFrame {
          * @param thePanel the Panel that will be added to the North of the JFrame.
          */
         public void setNorthPanel(final JPanel thePanel) {
-            removeNorthPanel();
+           // removeNorthPanel();
             myNorthPanel = thePanel;
             getContentPane().add(myNorthPanel, BorderLayout.NORTH);
             thePanel.requestFocus();

@@ -1,5 +1,6 @@
 package controller;
 
+import model.CreateEvent;
 import model.GetEvent;
 import model.Login;
 import model.NewUser;
@@ -7,7 +8,6 @@ import view.*;
 import view.MenuBar;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -37,6 +37,10 @@ public class  Controller{
 
     private MenuBar myMenuBar;
 
+    private String myUsername;
+
+    private String myPassword;
+
     private int clicked;
     public Controller() throws IOException, ClassNotFoundException, SQLException {
         myFrame = GUIFrame.getInstance();
@@ -52,17 +56,15 @@ public class  Controller{
         myFrame.setCenter(myLoginPanel);
         myMenuBar = new MenuBar();
 
+        myUsername = "";
+        myPassword = "";
+
         clicked = 1;
         start();
     }
 
-    public void start() {
-        myMenuBar.getMyAddButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new EventCreator();
-            }
-        });
+    public void start() throws ClassNotFoundException {
+
 
         myLoginPanel.getCreateNewButton().addActionListener(new ActionListener() {
             @Override
@@ -74,6 +76,7 @@ public class  Controller{
                 myLoginPanel.getCreateNewButton().removeAll();
             }
         });
+
 
         myLoginPanel.getOkButton().addActionListener(new ActionListener() {
             @Override
@@ -93,10 +96,10 @@ public class  Controller{
                         myLoginFlag = false;
                         myFrame.setCenter(myMainPanel.getMyScrollPane());
                         myLoginPanel.getOkButton().removeAll();
-                        myFrame.setJMenuBar(myMenuBar);
+                        myFrame.setNorthPanel(myMenuBar);
                         myMainPanelFlag = true;
-
-
+                        myUsername = myLoginPanel.getUsername();
+                        myPassword = myLoginPanel.getPassword();
 
                         clicked++;
                     }
@@ -115,24 +118,7 @@ public class  Controller{
                 // Perform NewUser action here when the "Ok" button is clicked
 
                 try {
-                    NewUser newUser = new NewUser(myCreateAccountPanel.getUsername(), myCreateAccountPanel.getPassword());
-                    if (clicked % 2 == 1) {
-                        if (newUser.getMyOutput() == 1) {
-                            JOptionPane.showMessageDialog(myFrame,
-                                    "Username already exist!");
-                        } else if (newUser.getMyOutput() == 2) {
-                            JOptionPane.showMessageDialog(myFrame,
-                                    "Account created successfully!");
-                        } else {
-                            JOptionPane.showMessageDialog(myFrame,
-                                    "Account failed to create");
-                        }
-                        clicked++;
-
-                    } else {
-                        clicked++;
-                    }
-
+                    createWarningMessage();
                     myCreateAccountPanel.getOkButton().removeAll();
                 } catch (ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
@@ -141,8 +127,25 @@ public class  Controller{
             }
         });
 
-
-
+        myMenuBar.getMyAddButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EventCreator event = new EventCreator();
+                event.getOkButton().addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            CreateEvent newEvent = new CreateEvent(myUsername, event.getTitleField().getText(), event.getDueDate(),
+                                                                    event.getProfessorFirstNameField().getText(),
+                                                                    event.getProfessorLastNameField().getText(), Integer.parseInt(event.getAssignmentPriorityField().getText()),
+                                                                   event.getStartTimeField(), event.getEndTimeField());
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                });
+            }
+        });
 
 
 
@@ -165,55 +168,25 @@ public class  Controller{
 
     }
 
+    private void createWarningMessage() throws ClassNotFoundException {
+        NewUser newUser = new NewUser(myCreateAccountPanel.getUsername(), myCreateAccountPanel.getPassword());
+        if (clicked % 2 == 1) {
+            if (newUser.getMyOutput() == 1) {
+                JOptionPane.showMessageDialog(myFrame,
+                        "Username already exist!");
+            } else if (newUser.getMyOutput() == 2) {
+                JOptionPane.showMessageDialog(myFrame,
+                        "Account created successfully!");
+            } else {
+                JOptionPane.showMessageDialog(myFrame,
+                        "Account failed to create");
+            }
+            clicked++;
 
-    // Gets the input from view code.
+        } else {
+            clicked++;
+        }
 
-    // check if the user is logging in or making new account
-
-    // if (UserName != null && password != null && user clicked enter)
-        // then call the Login(username, password)
-            // if (true) -> call event class (Event(username)) then make transition to main page
-            // else -> make JOptionPane giving message saying "username or password not matching"
-
-    // else if -> (user clicked new account)
-        // then make transition to new login screen
-            // if (UserName != null && password != null && user clicked enter)
-            // then call the NewUser(username, password)
-            // Make transition to the main page
-
-
-
-
-
-
-
-
-
-
-    //  getTitles(Ingeun)
-    //    -> Returns [390QUiz, SQLHW, AlgUnit2HW]             // We know the username and assignment titles
-
-    // Create EventButton Class {
-    //  myAssignmentID;
-    //  ...
-    //
-    //  for(String title : getTitle(Ingeun) {
-    //       int assignmentId = getAssignmentID(Ingeun, title);
-    //       getPrio(assignmentId);
-    //       getTime(assignmentId);
-    //       ...
-    //
-    //  }
-    // }
-
-    //  getAssignmentID(Ingeun, 390Quiz)
-    //    -> Returns AssignmentId                             // Now that we know the asssignment ID of this specific assignment,
-                                                              //    we can retrieve all the other datas.
-
-
-
-
-
-
+    }
 
 }

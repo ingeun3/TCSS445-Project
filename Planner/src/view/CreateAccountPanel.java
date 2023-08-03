@@ -81,13 +81,12 @@ public class CreateAccountPanel extends JPanel{
             return new String(passwordField.getPassword());
         }
 
-        public JTextField getUsernameField() {
-            return usernameField;
-        }
-
-        public JPasswordField getPasswordField() {
-            return passwordField;
-        }
+//        public JTextField getUsernameField() {
+//            return usernameField;
+//        }
+//        public JPasswordField getPasswordField() {
+//            return passwordField;
+//        }
 
         public JButton getOkButton() {
             return myOkButton;
