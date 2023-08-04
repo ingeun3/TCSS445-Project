@@ -16,9 +16,11 @@ public class CreateEvent {
 //        Class.forName("com.mysql.jdbc.Driver");
         myUsername = theUsername;
 
-        myAssignmentID = 101;
+        int lastUsedAssignmentID = new SQLQueries().getLastUsedAssignmentID();
 
-        myAssignmentID++;
+        System.out.println(lastUsedAssignmentID);
+        // Increment the assignment ID for the new instance
+        myAssignmentID = lastUsedAssignmentID + 1;
 
         insertEvent(theTitle);
         insertAssignmentDetail(thePrio, theDate);

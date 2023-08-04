@@ -19,4 +19,5 @@ public class MenuBar extends JPanel{
         return myAddButton;
     }
 
+    public JButton getMyDeleteButton() { return myDeleteButton; }
 }

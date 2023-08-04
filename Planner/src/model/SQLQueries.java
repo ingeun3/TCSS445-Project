@@ -1,12 +1,9 @@
 package model;
 
-import model.CreateEvent;
-import model.ServerData;
-
 import java.sql.*;
 import java.util.ArrayList;
 
-public class GetEvent {
+public class SQLQueries {
     private ArrayList<String> myEventTitles = new ArrayList<String>();
     private ArrayList<Object[]> res = new ArrayList<>();
 
@@ -27,6 +24,7 @@ public class GetEvent {
         }
         return myEventTitles;
     }
+
 
     public int getAssignmentID(String theUsername, String theAssignmentTitle) throws ClassNotFoundException {
         int res = -1;
@@ -116,14 +114,34 @@ public class GetEvent {
         return res;
     }
 
-    public ArrayList<Object[]> getAll() throws SQLException {
+    public int getLastUsedAssignmentID() throws ClassNotFoundException {
+        int res = -1;
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             Statement statement = connection.createStatement();
-            String query = "SELECT * FROM " + ServerData.USER_TABLE + " NATURAL JOIN " + ServerData.EVENT_TABLE + " " +
-                    ServerData.EVENT_TABLE + " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " "  +
-                    ServerData.ASSIGNMENT_DETAIL_TABLE + " NATURAL JOIN " + ServerData.PROF_TABLE + " "  +
-                    ServerData.PROF_TABLE + " NATURAL JOIN " + ServerData.TIME_TABLE;
+            String query = "SELECT MAX(assignment_id) id FROM " + ServerData.EVENT_TABLE;
             ResultSet resultSet = statement.executeQuery(query);
+            resultSet.next();
+            res = resultSet.getInt("id");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    public ArrayList<Object[]> getAllEventForUser(String theUsername) throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT * FROM " + ServerData.USER_TABLE +
+                    " NATURAL JOIN " + ServerData.EVENT_TABLE +
+                    " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
+                    " NATURAL JOIN " + ServerData.PROF_TABLE +
+                    " NATURAL JOIN " + ServerData.TIME_TABLE +
+                    " WHERE username = ?";
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+            checkStatement.setString(1, theUsername);
+
+            ResultSet resultSet = checkStatement.executeQuery();
 
             while (resultSet.next()) {
                 String title = resultSet.getString("title");
@@ -135,10 +153,7 @@ public class GetEvent {
                 Time end = resultSet.getTime("end_time");
                 boolean complete = resultSet.getBoolean("completed");
 
-                // Create an array to store the current row's data
                 Object[] rowData = {title, dueDate, priority, professorF, professorL, start, end, complete};
-
-                // Add the array to the ArrayList
                 res.add(rowData);
             }
         } catch (SQLException e) {

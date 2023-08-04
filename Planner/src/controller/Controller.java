@@ -1,7 +1,7 @@
 package controller;
 
 import model.CreateEvent;
-import model.GetEvent;
+import model.SQLQueries;
 import model.Login;
 import model.NewUser;
 import view.*;
@@ -48,9 +48,9 @@ public class  Controller{
         myCreateAccountPanel = new CreateAccountPanel();
 
         //myMainPanel = new DisplayPanel();
-        myData = new GetEvent().getAll();
 
-        myMainPanel = new DisplayPanel(myData);
+
+
 
         myLoginFlag = true;
         myFrame.setCenter(myLoginPanel);
@@ -86,6 +86,8 @@ public class  Controller{
                     Login login;
                     try {
                         login = new Login(myLoginPanel.getUsername(), myLoginPanel.getPassword());
+                        myUsername = myLoginPanel.getUsername();
+                        myPassword = myLoginPanel.getPassword();
                     } catch (ClassNotFoundException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -93,16 +95,9 @@ public class  Controller{
                         JOptionPane.showMessageDialog(myFrame,
                                 "Username or password not existing");
                     } else {
-                        myLoginFlag = false;
-                        myFrame.setCenter(myMainPanel.getMyScrollPane());
-                        myLoginPanel.getOkButton().removeAll();
-                        myFrame.setNorthPanel(myMenuBar);
-                        myMainPanelFlag = true;
-                        myUsername = myLoginPanel.getUsername();
-                        myPassword = myLoginPanel.getPassword();
-
-                        clicked++;
+                        loadJTable();
                     }
+                    clicked++;
                 } else {
                     clicked++;
                 }
@@ -130,22 +125,63 @@ public class  Controller{
         myMenuBar.getMyAddButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                EventCreator event = new EventCreator();
-                event.getOkButton().addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        try {
-                            CreateEvent newEvent = new CreateEvent(myUsername, event.getTitleField().getText(), event.getDueDate(),
-                                                                    event.getProfessorFirstNameField().getText(),
-                                                                    event.getProfessorLastNameField().getText(), Integer.parseInt(event.getAssignmentPriorityField().getText()),
-                                                                   event.getStartTimeField(), event.getEndTimeField());
-                        } catch (Exception ex) {
-                            throw new RuntimeException(ex);
+                if (clicked % 2 == 1) {
+                    EventCreatingPanel event = new EventCreatingPanel();
+                    event.getOkButton().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            try {
+                                CreateEvent newEvent = new CreateEvent(myUsername, event.getTitleField().getText(), event.getDueDate(),
+                                        event.getProfessorFirstNameField().getText(),
+                                        event.getProfessorLastNameField().getText(), Integer.parseInt(event.getAssignmentPriorityField().getText()),
+                                        event.getStartTimeField(), event.getEndTimeField());
+                                loadJTable();
+                                event.close();
+                            } catch (Exception ex) {
+                                throw new RuntimeException(ex);
+                            }
                         }
-                    }
-                });
+                    });
+                    clicked++;
+                } else {
+                    clicked++;
+                }
             }
         });
+
+        myMenuBar.getMyDeleteButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(clicked % 2 == 1) {
+                    int selectedRow = myMainPanel.getTable().getSelectedRow();
+                    System.out.println(selectedRow);
+                    if (selectedRow != -1) {
+                        myMainPanel.getModel().removeRow(selectedRow);
+                    } else {
+                        JOptionPane.showMessageDialog(myFrame, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    clicked++;
+                } else {
+                    clicked++;
+                }
+            }
+        });
+
+        /*
+        JButton deleteButton = new JButton("Delete Selected Row");
+            deleteButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        model.removeRow(selectedRow);
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+         */
+
 
 
 
@@ -186,6 +222,21 @@ public class  Controller{
         } else {
             clicked++;
         }
+
+    }
+
+    private void loadJTable() {
+        try {
+            myData = new SQLQueries().getAllEventForUser(myUsername);
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        myMainPanel = new DisplayPanel(myData);
+        myLoginFlag = false;
+        myFrame.setCenter(myMainPanel.getMyScrollPane());
+        myLoginPanel.getOkButton().removeAll();
+        myFrame.setNorthPanel(myMenuBar);
+        myMainPanelFlag = true;
 
     }
 

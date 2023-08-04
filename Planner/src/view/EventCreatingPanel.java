@@ -2,12 +2,10 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
-public class EventCreator {
+public class EventCreatingPanel {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     private JTextField titleField;
@@ -30,7 +28,7 @@ public class EventCreator {
     private JPanel myPanel;
 
 
-    public EventCreator() {
+    public EventCreatingPanel() {
         myPanel = new JPanel(new GridBagLayout());
 
 
@@ -209,9 +207,7 @@ public class EventCreator {
     public JButton getOkButton() {
         return myOkButton;
     }
-    public boolean getOkayStatus() {
-        boolean temp = myOkayPressed;
-        myOkayPressed = false;
-        return temp;
+    public void close() {
+        myFrame.dispose();
     }
 }

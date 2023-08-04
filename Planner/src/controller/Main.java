@@ -1,6 +1,4 @@
 package controller;
-import model.NewUser;
-import view.EventCreator;
 
 import java.io.IOException;
 import java.sql.*;

@@ -21,6 +21,8 @@ public class Login {
             PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
             checkStatement.setString(1, theUsername);
             checkStatement.setString(2, thePassword);
+
+
             ResultSet checkResultSet = checkStatement.executeQuery();
             checkResultSet.next();
 

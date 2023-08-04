@@ -2,18 +2,14 @@ package view;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class DisplayPanel extends JTable {
-    private JButton myDeleteButton;
     private JTable myTable;
 
     private JScrollPane myScrollPane;
 
-
+    private DefaultTableModel myModel;
 
     public DisplayPanel(ArrayList<Object[]> SQLData) {
         super();
@@ -25,7 +21,7 @@ public class DisplayPanel extends JTable {
             data[i] = SQLData.get(i);
         }
 
-        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+        myModel = new DefaultTableModel(data, columnNames) {
             // Override isCellEditable to selectively make cells editable
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -33,16 +29,19 @@ public class DisplayPanel extends JTable {
                 return column == 2;
             }
         };
-        myTable = new JTable(model);
+        myTable = new JTable(myModel);
         myScrollPane = new JScrollPane(myTable);
-        myDeleteButton = new JButton("Delete Selected Row");
 
     }
 
-    public JButton getDeleteButton (){
-        return myDeleteButton;
-    }
     public JScrollPane getMyScrollPane() {
         return myScrollPane;
+    }
+
+    public JTable getTable() {
+        return  myTable;
+    }
+    public DefaultTableModel getModel() {
+        return myModel;
     }
 }
