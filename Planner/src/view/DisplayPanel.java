@@ -13,7 +13,7 @@ public class DisplayPanel extends JTable {
 
     public DisplayPanel(ArrayList<Object[]> SQLData) {
         super();
-        String[] columnNames = {"Title", "Due Date", "Priority", "Professor First Name", "Professor Last Name", "Start", "End", "Complete"};
+        String[] columnNames = {"Assignment ID","Title", "Due Date", "Priority", "Professor First Name", "Professor Last Name", "Start", "End", "Complete"};
 
         // Convert the ArrayList to a 2D array
         Object[][] data = new Object[SQLData.size()][];
@@ -26,7 +26,8 @@ public class DisplayPanel extends JTable {
             @Override
             public boolean isCellEditable(int row, int column) {
                 // Allow editing only for the "Age" column (column index 2)
-                return column == 2;
+                return column == 1 || column == 2 || column ==  3 || column == 4 || column == 5 || column == 6 || column == 7
+                        || column == 8;
             }
         };
         myTable = new JTable(myModel);

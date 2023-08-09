@@ -18,7 +18,6 @@ public class CreateEvent {
 
         int lastUsedAssignmentID = new SQLQueries().getLastUsedAssignmentID();
 
-        System.out.println(lastUsedAssignmentID);
         // Increment the assignment ID for the new instance
         myAssignmentID = lastUsedAssignmentID + 1;
 

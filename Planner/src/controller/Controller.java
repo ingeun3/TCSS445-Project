@@ -10,8 +10,13 @@ import view.MenuBar;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 public class  Controller{
@@ -154,9 +159,11 @@ public class  Controller{
             public void actionPerformed(ActionEvent e) {
                 if(clicked % 2 == 1) {
                     int selectedRow = myMainPanel.getTable().getSelectedRow();
-                    System.out.println(selectedRow);
+                    Object selectedValue = myMainPanel.getTable().getValueAt(selectedRow, 0);
                     if (selectedRow != -1) {
                         myMainPanel.getModel().removeRow(selectedRow);
+                        SQLQueries temp  =  new SQLQueries();
+                        temp.deleteRow(selectedValue);
                     } else {
                         JOptionPane.showMessageDialog(myFrame, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -167,40 +174,52 @@ public class  Controller{
             }
         });
 
-        /*
-        JButton deleteButton = new JButton("Delete Selected Row");
-            deleteButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int selectedRow = table.getSelectedRow();
-                    if (selectedRow != -1) {
-                        model.removeRow(selectedRow);
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
+
+
+        myMenuBar.getMyEditButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(clicked % 2 == 1) {
+                    int selectedRow = myMainPanel.getTable().getSelectedRow();
+                    int selectedColumn = myMainPanel.getTable().getSelectedColumn();
+
+                    if (selectedRow != -1 && selectedColumn != -1) {
+                        Object newValue = myMainPanel.getTable().getValueAt(selectedRow, selectedColumn);
+                        Object id = myMainPanel.getTable().getValueAt(selectedRow, 0);
+                        // Perform the database update using SQL query
+                        SQLQueries temp = new SQLQueries();
+                        temp.editRow(id, selectedColumn, newValue);
                     }
+                    clicked++;
+                } else {
+                    clicked++;
                 }
-            });
-         */
+            }
 
+        });
 
-
-
-//        while (true) {
-//            if (myLoginFlag) {
-//                if (myLoginPanel.getCreateAccountStatus()) {
-//                    myLoginFlag = false;
-//                    myFrame.setCenter(myCreateAccountPanel);
-//                    myCreateAccountFlag = true;
-//                }
-//            } else if (myCreateAccountFlag) {
-//                if (myCreateAccountPanel.getOkayStatus()) {
-//                    myCreateAccountFlag = false;
-//                    myFrame.setCenter(myLoginPanel);
-//                    myLoginFlag = true;
-//                }
-//            }
-//        }
-
+        myMenuBar.getMySearchButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (clicked % 2 == 1) {
+                    SearchPanel event = new SearchPanel();
+                    event.getOkButton().addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            try {
+                                loadJTableOnSearch(event.getStartDate(), event.getEndDate());
+                                event.close();
+                            } catch (Exception ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        }
+                    });
+                    clicked++;
+                } else {
+                    clicked++;
+                }
+            }
+        });
 
     }
 
@@ -227,7 +246,16 @@ public class  Controller{
 
     private void loadJTable() {
         try {
-            myData = new SQLQueries().getAllEventForUser(myUsername);
+            LocalDateTime currentDateTime = LocalDateTime.now();
+
+            // Convert LocalDateTime to java.sql.Date
+            java.sql.Date currentDateAsSqlDate = java.sql.Date.valueOf(currentDateTime.toLocalDate());
+
+            // Add 7 days to the java.sql.Date
+            long millisToAdd = 7L * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+            java.sql.Date newSqlDate = new java.sql.Date(currentDateAsSqlDate.getTime() + millisToAdd);
+            myData = new SQLQueries().getAllEventForUser(myUsername,  currentDateAsSqlDate, newSqlDate);
+
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -239,5 +267,23 @@ public class  Controller{
         myMainPanelFlag = true;
 
     }
+
+    private void loadJTableOnSearch(Date theStart, Date theEnd) {
+        try {
+
+            myData = new SQLQueries().getAllEventForUser(myUsername,  theStart, theEnd);
+
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        myMainPanel = new DisplayPanel(myData);
+        myLoginFlag = false;
+        myFrame.setCenter(myMainPanel.getMyScrollPane());
+        myLoginPanel.getOkButton().removeAll();
+        myFrame.setNorthPanel(myMenuBar);
+        myMainPanelFlag = true;
+
+    }
+
 
 }
