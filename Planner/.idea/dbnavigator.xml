@@ -13,7 +13,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="2525c3cf-4c85-4bc7-88c0-cd8c2b2321a7">
-      <console name="Planner" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Planner" type="STANDARD" schema="planner_ddl" session="Main"><![CDATA[select * from user_table]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -24,14 +24,6 @@
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
-  </component>
-  <component name="DBNavigator.Project.MethodExecutionManager">
-    <method-browser />
-    <execution-history>
-      <group-entries value="true" />
-      <execution-inputs />
-    </execution-history>
-    <argument-values-cache />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
@@ -57,7 +49,7 @@
           <tns-profile value="" />
           <type value="USER_PASSWORD" />
           <user value="root" />
-          <deprecated-pwd value="MTIzNGtoaW53aW4h" />
+          <deprecated-pwd value="cGxlYXNlZ2l2ZXVzQVRvbQ==" />
         </database>
         <properties>
           <auto-commit value="false" />
@@ -523,5 +515,8 @@
         </visibility-settings>
       </environment>
     </general-settings>
+  </component>
+  <component name="DBNavigator.Project.StatementExecutionManager">
+    <execution-variables />
   </component>
 </project>
