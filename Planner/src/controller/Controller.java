@@ -10,13 +10,10 @@ import view.MenuBar;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 
 public class  Controller{
@@ -202,12 +199,12 @@ public class  Controller{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (clicked % 2 == 1) {
-                    SearchPanel event = new SearchPanel();
+                    SearchPanel event = new SearchPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : ");
                     event.getOkButton().addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             try {
-                                loadJTableOnSearch(event.getStartDate(), event.getEndDate());
+                                loadJTableOnSearch(event.getMyFirstEntry(), event.getMySecondEntry());
                                 event.close();
                             } catch (Exception ex) {
                                 throw new RuntimeException(ex);
