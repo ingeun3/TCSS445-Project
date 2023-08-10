@@ -171,8 +171,6 @@ public class  Controller{
             }
         });
 
-
-
         myMenuBar.getMyEditButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -192,7 +190,6 @@ public class  Controller{
                     clicked++;
                 }
             }
-
         });
 
         myMenuBar.getMySearchButton().addActionListener(new ActionListener() {
@@ -251,7 +248,7 @@ public class  Controller{
             // Add 7 days to the java.sql.Date
             long millisToAdd = 7L * 24 * 60 * 60 * 1000; // 7 days in milliseconds
             java.sql.Date newSqlDate = new java.sql.Date(currentDateAsSqlDate.getTime() + millisToAdd);
-            myData = new SQLQueries().getAllEventForUser(myUsername,  currentDateAsSqlDate, newSqlDate);
+            myData = new SQLQueries().searchDefault(myUsername,  currentDateAsSqlDate, newSqlDate);
 
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -268,7 +265,7 @@ public class  Controller{
     private void loadJTableOnSearch(Date theStart, Date theEnd) {
         try {
 
-            myData = new SQLQueries().getAllEventForUser(myUsername,  theStart, theEnd);
+            myData = new SQLQueries().searchDefault(myUsername,  theStart, theEnd);
 
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -281,6 +278,5 @@ public class  Controller{
         myMainPanelFlag = true;
 
     }
-
 
 }

@@ -197,7 +197,7 @@ public class SQLQueries {
         }
     }
 
-    public ArrayList<Object[]> getAllEventForUser(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+    public ArrayList<Object[]> searchDefault(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             String query = "SELECT * FROM " + ServerData.EVENT_TABLE + " E " +
@@ -228,6 +228,184 @@ public class SQLQueries {
                 Object[] rowData = {assignment_id, title, dueDate, priority, professorF, professorL, start, end, complete};
                 res.add(rowData);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+    public ArrayList<Object[]> searchByPriority(String theUsername, int thePriority, Date theDueDate) throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT title, prio, due_date FROM " + ServerData.EVENT_TABLE +
+                    " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
+                    " WHERE prio > ? AND username IN (SELECT username " +
+                    " FROM event_table " +
+                    " WHERE username = ? AND due_date >= ?" +
+                    " GROUP BY  assignment_id) ";
+
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+            checkStatement.setInt(1, thePriority);
+            checkStatement.setString(2, theUsername);
+            checkStatement.setDate(3, theDueDate);
+
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String title = resultSet.getString("title");
+                int priority = resultSet.getInt("prio");
+                Date dueDate = resultSet.getDate("due_date");
+
+                Object[] rowData = {title,  priority, dueDate};
+                res.add(rowData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+    public ArrayList<Object[]> searchByProfessor(String theProfLastName, String theProfFirstName, Date theStartDate, Date theEndDate) throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT assignment_id, title FROM (SELECT * FROM ( " + ServerData.EVENT_TABLE + "" +
+                    " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " NATURAL JOIN " + ServerData.PROF_TABLE + ")) AS A " +
+                    " WHERE A.Lname = ? AND  A.due_date >= ? AND " +
+                    " EXISTS (SELECT * " +
+                    " FROM (SELECT * FROM ( " + ServerData.EVENT_TABLE  +
+                    " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
+                    " NATURAL JOIN " + ServerData.PROF_TABLE + " )) AS B " +
+                    " WHERE B.Lname = ? AND B.due_date <= ? AND A.assignment_id = B.assignment_id); ";
+
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+            checkStatement.setString(1, theProfLastName);
+            checkStatement.setDate(2, theStartDate);
+            checkStatement.setString(3, theProfLastName);
+            checkStatement.setDate(4, theEndDate);
+
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int assignment_id = resultSet.getInt("assignment_id");
+                String title = resultSet.getString("title");
+
+                Object[] rowData = {assignment_id,  title};
+                res.add(rowData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+    public ArrayList<Object[]> minimizeView(String theUsername, Date theStartDate) throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT A.assignment_id, title, prio, due_date " +
+                    " FROM " + ServerData.EVENT_TABLE + " E " +
+                    " LEFT JOIN " +  ServerData.ASSIGNMENT_DETAIL_TABLE + " A ON E.assignment_id = A.assignment_id " +
+                    " WHERE E.username = ? AND A.due_date >= ?" +
+                    " UNION " +
+                    " SELECT A.assignment_id, title, prio, due_date " +
+                    " FROM " + ServerData.EVENT_TABLE + " E " +
+                    " RIGHT JOIN assignment_detail_table A ON E.assignment_id = A.assignment_id;" +
+                    " WHERE E.username = ? AND A.due_date >= ?";
+
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+            checkStatement.setString(1, theUsername);
+            checkStatement.setDate(2, theStartDate);
+            checkStatement.setDate(3, theStartDate);
+
+
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int assignment_id = resultSet.getInt("assignment_id");
+                String title = resultSet.getString("title");
+                int priority = resultSet.getInt("prio");
+                Date dueDate = resultSet.getDate("due_date");
+
+                Object[] rowData = {assignment_id, title,  priority, dueDate};
+                res.add(rowData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+    public ArrayList<Object[]> countNumberOfAssignment(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT username, COUNT(title) " +
+                    " FROM " + ServerData.USER_TABLE +
+                    " JOIN " + ServerData.EVENT_TABLE + " USING (username) " +
+                    " JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " USING (assignment_id) " +
+                    " WHERE username = ? AND username IN (( " +
+                    "    SELECT username " +
+                    "    FROM " + ServerData.USER_TABLE +
+                    "    WHERE username = ?) " +
+                    " AND " +
+                    "   ( SELECT username " +
+                    "    FROM " + ServerData.USER_TABLE + " )) AND due_date >= ? AND due_date <= ?;";
+
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+            checkStatement.setString(1, theUsername);
+            checkStatement.setString(2, theUsername);
+            checkStatement.setDate(3, theStartDate);
+            checkStatement.setDate(4, theEndDate);
+
+
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String username = resultSet.getString("username");
+                int count = resultSet.getInt("COUNT(title)");
+
+                Object[] rowData = {username, count};
+                res.add(rowData);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+    public ArrayList<Object[]> searchByTime(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT title, TIMEDIFF(end_time, start_time) AS total_time " +
+                    " FROM " + ServerData.EVENT_TABLE + " NATURAL JOIN " + ServerData.TIME_TABLE + " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
+                    " WHERE username = ? " +
+                    " AND due_date >= ? AND due_date <= ?;";
+
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+            checkStatement.setString(1, theUsername);
+            checkStatement.setDate(2, theStartDate);
+            checkStatement.setDate(3, theEndDate);
+
+
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String username = resultSet.getString("title");
+                int timeTook = resultSet.getInt("total_time");
+
+                Object[] rowData = {username, timeTook};
+                res.add(rowData);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
