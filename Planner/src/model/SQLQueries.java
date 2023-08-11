@@ -238,9 +238,9 @@ public class SQLQueries {
     public ArrayList<Object[]> searchByPriority(String theUsername, int thePriority, Date theDueDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            String query = "SELECT title, prio, due_date FROM " + ServerData.EVENT_TABLE +
+            String query = "SELECT assignment_id, title, prio, due_date FROM " + ServerData.EVENT_TABLE +
                     " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
-                    " WHERE prio > ? AND username IN (SELECT username " +
+                    " WHERE prio >= ? AND username IN (SELECT username " +
                     " FROM event_table " +
                     " WHERE username = ? AND due_date >= ?" +
                     " GROUP BY  assignment_id) ";
@@ -254,11 +254,12 @@ public class SQLQueries {
             ResultSet resultSet = checkStatement.executeQuery();
 
             while (resultSet.next()) {
+                int assignment_id = resultSet.getInt("assignment_id");
                 String title = resultSet.getString("title");
                 int priority = resultSet.getInt("prio");
                 Date dueDate = resultSet.getDate("due_date");
 
-                Object[] rowData = {title,  priority, dueDate};
+                Object[] rowData = {assignment_id, title,  priority, dueDate};
                 res.add(rowData);
             }
         } catch (SQLException e) {
@@ -268,7 +269,7 @@ public class SQLQueries {
         return res;
     }
 
-    public ArrayList<Object[]> searchByProfessor(String theProfLastName, String theProfFirstName, Date theStartDate, Date theEndDate) throws SQLException {
+    public ArrayList<Object[]> searchByProfessor(String theProfLastName, Date theStartDate, Date theEndDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             String query = "SELECT assignment_id, title FROM (SELECT * FROM ( " + ServerData.EVENT_TABLE + "" +
@@ -300,6 +301,97 @@ public class SQLQueries {
             e.printStackTrace();
         }
 
+        return res;
+    }
+
+
+
+    public ArrayList<Object[]> searchByTimeSpentOnAssignment(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT title, TIMEDIFF(end_time, start_time) AS total_time " +
+                    " FROM " + ServerData.EVENT_TABLE + " NATURAL JOIN " + ServerData.TIME_TABLE + " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
+                    " WHERE username = ? " +
+                    " AND due_date >= ? AND due_date <= ?;";
+
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+            checkStatement.setString(1, theUsername);
+            checkStatement.setDate(2, theStartDate);
+            checkStatement.setDate(3, theEndDate);
+
+
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String username = resultSet.getString("title");
+                Time timeTook = resultSet.getTime("total_time");
+
+                Object[] rowData = {username, timeTook};
+                res.add(rowData);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+    public ArrayList<Object[]> searchCompletedAssignment(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT assignment_id, title, Fname, Lname " +
+                    " FROM " + ServerData.EVENT_TABLE + " NATURAL JOIN " + ServerData.PROF_TABLE + " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
+                    " WHERE completed = 1 AND due_date > ? AND due_date < ? AND username = ?;";
+
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+            checkStatement.setDate(1, theStartDate);
+            checkStatement.setDate(2, theEndDate);
+            checkStatement.setString(3, theUsername);
+
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int assignmentID = resultSet.getInt("assignment_id");
+                String title = resultSet.getString("title");
+                String fname = resultSet.getString("Fname");
+                String lname = resultSet.getString("Lname");
+
+                Object[] rowData = {assignmentID, title, fname, lname};
+                res.add(rowData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+    public ArrayList<Object[]> searchByTotalTimeSpent(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT  username,  SEC_TO_TIME(SUM(TIME_TO_SEC((TIMEDIFF(end_time, start_time))))) AS total_time_spent " +
+                    " FROM " + ServerData.EVENT_TABLE + " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " NATURAL JOIN " + ServerData.TIME_TABLE +
+                    " WHERE username = ? AND due_date > ? AND due_date < ?;";
+
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+            checkStatement.setString(1, theUsername);
+            checkStatement.setDate(2, theStartDate);
+            checkStatement.setDate(3, theEndDate);
+
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String username = resultSet.getString("username");
+                String timeSpent = resultSet.getString("total_time_spent");
+
+                Object[] rowData = {username, timeSpent};
+                res.add(rowData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return res;
     }
 
@@ -341,27 +433,101 @@ public class SQLQueries {
         return res;
     }
 
+    public ArrayList<Object[]> avgTimeSpentForProf() throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT  Fname, Lname, SEC_TO_TIME(ROUND(AVG(TIME_TO_SEC((TIMEDIFF(end_time, start_time)))))) AS average_time_per_assignment " +
+                    " FROM " + ServerData.EVENT_TABLE + " NATURAL JOIN " + ServerData.TIME_TABLE + " NATURAL JOIN " + ServerData.PROF_TABLE +
+                    " GROUP BY Fname, Lname " +
+                    " ORDER BY average_time_per_assignment DESC;";
+
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String fname = resultSet.getString("Fname");
+                String lname = resultSet.getString("Lname");
+                int avgTime = resultSet.getInt("average_time_per_assignment");
+
+                Object[] rowData = {fname, lname, avgTime};
+                res.add(rowData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+
+    public ArrayList<Object[]> longerThanAvg() throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT E.title, P.Fname, P.Lname, (TIMEDIFF(T.end_time, T.start_time)) AS time_spent " +
+                    " FROM " + ServerData.EVENT_TABLE + " E " +
+                    " NATURAL JOIN " + ServerData.TIME_TABLE + " T " +
+                    " NATURAL JOIN " + ServerData.PROF_TABLE + " P " +
+                    " NATURAL JOIN ( " +
+                    "    SELECT P1.Fname, P1.Lname, AVG(TIME_TO_SEC(TIMEDIFF(T1.end_time, T1.start_time))) AS avg_time " +
+                    "    FROM " + ServerData.TIME_TABLE + " T1 " +
+                    "    NATURAL JOIN " + ServerData.PROF_TABLE + " P1 " +
+                    "    WHERE T1.end_time IS NOT NULL " +
+                    "    GROUP BY P1.Fname, P1.Lname " +
+                    " ) AS ProfessorAvgTime " +
+                    " WHERE T.end_time IS NOT NULL " +
+                    " AND TIME_TO_SEC(TIMEDIFF(T.end_time, T.start_time)) > ProfessorAvgTime.avg_time " +
+                    " ORDER BY Lname, Fname";
+
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String title = resultSet.getString("title");
+                String fname = resultSet.getString("Fname");
+                String lname = resultSet.getString("Lname");
+                int timeSpent = resultSet.getInt("time_spent");
+
+                Object[] rowData = {title, fname, lname, timeSpent};
+                res.add(rowData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+
+
     public ArrayList<Object[]> countNumberOfAssignment(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             String query = "SELECT username, COUNT(title) " +
-                    " FROM " + ServerData.USER_TABLE +
-                    " JOIN " + ServerData.EVENT_TABLE + " USING (username) " +
-                    " JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " USING (assignment_id) " +
-                    " WHERE username = ? AND username IN (( " +
-                    "    SELECT username " +
-                    "    FROM " + ServerData.USER_TABLE +
-                    "    WHERE username = ?) " +
-                    " AND " +
-                    "   ( SELECT username " +
-                    "    FROM " + ServerData.USER_TABLE + " )) AND due_date >= ? AND due_date <= ?;";
+                    " FROM ( " +
+                    "    SELECT ut.username, et.title " +
+                    "    FROM " + ServerData.USER_TABLE + " ut " +
+                    "    JOIN " + ServerData.EVENT_TABLE + " et USING (username) " +
+                    "    JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " adt USING (assignment_id) " +
+                    "    WHERE ut.username = ? " +
+                    "        AND adt.due_date >= ? AND adt.due_date <= ? " +
+                    "    UNION " +
+                    "    SELECT ut.username, et.title " +
+                    "    FROM " + ServerData.USER_TABLE + " ut " +
+                    "    JOIN " + ServerData.EVENT_TABLE + " et USING (username) " +
+                    "    JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " adt USING (assignment_id) " +
+                    "    WHERE adt.due_date >= ? AND adt.due_date <= ? " +
+                    " ) AS combined_data " +
+                    " GROUP BY username;";
 
 
             PreparedStatement checkStatement = connection.prepareStatement(query);
             checkStatement.setString(1, theUsername);
-            checkStatement.setString(2, theUsername);
-            checkStatement.setDate(3, theStartDate);
-            checkStatement.setDate(4, theEndDate);
+            checkStatement.setDate(2, theStartDate);
+            checkStatement.setDate(3, theEndDate);
+            checkStatement.setDate(4, theStartDate);
+            checkStatement.setDate(5, theEndDate);
 
 
             ResultSet resultSet = checkStatement.executeQuery();
@@ -380,37 +546,4 @@ public class SQLQueries {
 
         return res;
     }
-
-    public ArrayList<Object[]> searchByTime(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
-        ArrayList<Object[]> res = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            String query = "SELECT title, TIMEDIFF(end_time, start_time) AS total_time " +
-                    " FROM " + ServerData.EVENT_TABLE + " NATURAL JOIN " + ServerData.TIME_TABLE + " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
-                    " WHERE username = ? " +
-                    " AND due_date >= ? AND due_date <= ?;";
-
-
-            PreparedStatement checkStatement = connection.prepareStatement(query);
-            checkStatement.setString(1, theUsername);
-            checkStatement.setDate(2, theStartDate);
-            checkStatement.setDate(3, theEndDate);
-
-
-            ResultSet resultSet = checkStatement.executeQuery();
-
-            while (resultSet.next()) {
-                String username = resultSet.getString("title");
-                int timeTook = resultSet.getInt("total_time");
-
-                Object[] rowData = {username, timeTook};
-                res.add(rowData);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return res;
-    }
-
 }

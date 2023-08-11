@@ -11,9 +11,24 @@ public class DisplayPanel extends JTable {
 
     private DefaultTableModel myModel;
 
-    public DisplayPanel(ArrayList<Object[]> SQLData) {
+    private String[] columnNames;
+
+    public DisplayPanel(ArrayList<Object[]> SQLData, int theType) {
         super();
-        String[] columnNames = {"Assignment ID","Title", "Due Date", "Priority", "Professor First Name", "Professor Last Name", "Start", "End", "Complete"};
+        if(theType == 1) {
+            columnNames = new String[]{"Assignment ID", "Title", "Due Date", "Priority", "Professor First Name", "Professor Last Name", "Start", "End", "Complete"};
+        } else if (theType == 2) {
+            columnNames = new String[]{"Assignment ID", "Title",  "Priority", "Due Date"};
+        } else if (theType == 3) {
+            columnNames = new String[]{"Assignment ID", "Title"};
+        } else if (theType == 4) {
+            columnNames = new String[]{"Title", "Time"};
+        } else if (theType == 5) {
+            columnNames = new String[]{"Assignment ID", "Title", "Professor First Name", "Professor Last Name"};
+        } else if (theType == 6) {
+            columnNames = new String[]{"User Name", "Total Time"};
+        }
+
 
         // Convert the ArrayList to a 2D array
         Object[][] data = new Object[SQLData.size()][];

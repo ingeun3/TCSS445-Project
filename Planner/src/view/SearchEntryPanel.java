@@ -2,10 +2,8 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
-public class SearchPanel {
+public class SearchEntryPanel {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     private JTextField myFirstEntry;
@@ -18,13 +16,14 @@ public class SearchPanel {
 
     private String myUsername;
 
-    private JButton myOkButton;
 
-    private JFrame myFrame;
 
     private JPanel myPanel;
 
-    public SearchPanel(String theFirstEntry) {
+
+
+
+    public SearchEntryPanel(String theFirstEntry) {
         myPanel = new JPanel(new GridBagLayout());
 
 
@@ -35,11 +34,11 @@ public class SearchPanel {
         Font font = startDateLabel.getFont().deriveFont(20f);
         startDateLabel.setFont(font);
         myFirstEntry = new JTextField(20);
-        myOkButton =  new JButton("Ok");
+
 
 
         // Set preferred size for labels to control their width
-        Dimension labelSize = new Dimension(215, 30);
+        Dimension labelSize = new Dimension(260, 30);
         startDateLabel.setPreferredSize(labelSize);
 
         // Add components using GridBagConstraints
@@ -60,13 +59,15 @@ public class SearchPanel {
         constraints.weightx = 1.0; // Allow the panel to expand horizontally
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        buttonPanel.add(myOkButton);
+
         myPanel.add(buttonPanel, constraints);
 
-        myFrame = new JFrame("Add");
-        start();
+
+
     }
-    public SearchPanel(String theFirstEntry, String theSecondEntry) {
+
+
+    public SearchEntryPanel(String theFirstEntry, String theSecondEntry) {
         myPanel = new JPanel(new GridBagLayout());
 
 
@@ -82,11 +83,8 @@ public class SearchPanel {
         endDateLabel.setFont(font);
         mySecondEntry = new JTextField(20);
 
-        myOkButton =  new JButton("Ok");
-
-
         // Set preferred size for labels to control their width
-        Dimension labelSize = new Dimension(215, 30);
+        Dimension labelSize = new Dimension(260, 30);
         startDateLabel.setPreferredSize(labelSize);
         endDateLabel.setPreferredSize(labelSize);
 
@@ -117,23 +115,20 @@ public class SearchPanel {
         constraints.weightx = 1.0; // Allow the panel to expand horizontally
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        buttonPanel.add(myOkButton);
         myPanel.add(buttonPanel, constraints);
 
-        myFrame = new JFrame("Add");
-        start();
+
     }
 
-    public SearchPanel(String theFirstEntry, String theSecondEntry, String theThirdEntry) {
+    public SearchEntryPanel(String theFirstEntry, String theSecondEntry, String theThirdEntry) {
         myPanel = new JPanel(new GridBagLayout());
-
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(10, 10, 10, 10);
 
-        JLabel firstEntryLabel = new JLabel(theFirstEntry);
-        Font font = firstEntryLabel.getFont().deriveFont(20f);
-        firstEntryLabel.setFont(font);
+        JLabel myFirstEntryLabel = new JLabel(theFirstEntry);
+        Font font = myFirstEntryLabel.getFont().deriveFont(20f);
+        myFirstEntryLabel.setFont(font);
         myFirstEntry = new JTextField(20);
 
         JLabel mySecondEntryLabel = new JLabel(theSecondEntry);
@@ -144,18 +139,17 @@ public class SearchPanel {
         mySecondEntryLabel.setFont(font);
         myThirdEntry = new JTextField(20);
 
-        myOkButton =  new JButton("Ok");
-
 
         // Set preferred size for labels to control their width
-        Dimension labelSize = new Dimension(215, 30);
-        firstEntryLabel.setPreferredSize(labelSize);
+        Dimension labelSize = new Dimension(260, 30);
+        myFirstEntryLabel.setPreferredSize(labelSize);
         mySecondEntryLabel.setPreferredSize(labelSize);
+        myThirdEntryLabel.setPreferredSize(labelSize);
 
         // Add components using GridBagConstraints
         constraints.gridx = 0;
         constraints.gridy = 0;
-        myPanel.add(firstEntryLabel, constraints);
+        myPanel.add(myFirstEntryLabel, constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 0;
@@ -171,11 +165,11 @@ public class SearchPanel {
 
         constraints.gridx = 0;
         constraints.gridy = 2;
-        myPanel.add(mySecondEntryLabel, constraints);
+        myPanel.add(myThirdEntryLabel, constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 2;
-        myPanel.add(mySecondEntry, constraints);
+        myPanel.add(myThirdEntry, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 3;
@@ -184,52 +178,24 @@ public class SearchPanel {
         constraints.fill = GridBagConstraints.HORIZONTAL; // Make the panel fill horizontally
         constraints.weightx = 1.0; // Allow the panel to expand horizontally
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        buttonPanel.add(myOkButton);
-        myPanel.add(buttonPanel, constraints);
 
-        myFrame = new JFrame("Add");
-        start();
+
     }
 
-    private void start() {
-        myFrame.add(myPanel);
-        myFrame.setPreferredSize(new Dimension(600, 500));
-        myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        myFrame.pack();
+    public JPanel getPanel() {
+        return myPanel;
+    }
 
-        // Center the JFrame on the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int centerX = (screenSize.width - myFrame.getWidth()) / 2;
-        int centerY = (screenSize.height - myFrame.getHeight()) / 2;
-        myFrame.setLocation(centerX, centerY);
+    public String getMyFirstEntry() throws Exception {
+        return myFirstEntry.getText();
+    }
 
-        myFrame.pack();
-        myFrame.setVisible(true);
+    public String getMySecondEntry() throws Exception {
+        return  mySecondEntry.getText();
+    }
+    public String getMyThirdEntry() throws Exception {
+        return  myThirdEntry.getText();
     }
 
 
-    public java.sql.Date getMyFirstEntry() throws Exception {
-        String dateString = myFirstEntry.getText();
-        return convertStringToSqlDate(dateString);
-    }
-
-    public java.sql.Date getMySecondEntry() throws Exception {
-        String dateString = mySecondEntry.getText();
-        return convertStringToSqlDate(dateString);
-    }
-
-
-    public static java.sql.Date convertStringToSqlDate(String strDate) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date parsedDate = dateFormat.parse(strDate);
-        return new java.sql.Date(parsedDate.getTime());
-    }
-
-    public JButton getOkButton() {
-        return myOkButton;
-    }
-    public void close() {
-        myFrame.dispose();
-    }
 }
