@@ -23,7 +23,7 @@ public class SearchEntryPanel {
 
 
 
-    public SearchEntryPanel(String theFirstEntry) {
+    public SearchEntryPanel(String theFirstEntry, String theLabel) {
         myPanel = new JPanel(new GridBagLayout());
 
 
@@ -35,19 +35,25 @@ public class SearchEntryPanel {
         startDateLabel.setFont(font);
         myFirstEntry = new JTextField(20);
 
-
+        JLabel searchLabel = new JLabel(theLabel);
+        searchLabel.setFont(font);
 
         // Set preferred size for labels to control their width
         Dimension labelSize = new Dimension(260, 30);
         startDateLabel.setPreferredSize(labelSize);
+        searchLabel.setPreferredSize(new Dimension(300, 30));
 
         // Add components using GridBagConstraints
         constraints.gridx = 0;
         constraints.gridy = 0;
+        myPanel.add(searchLabel, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
         myPanel.add(startDateLabel, constraints);
 
         constraints.gridx = 1;
-        constraints.gridy = 0;
+        constraints.gridy = 1;
         myPanel.add(myFirstEntry, constraints);
 
 
@@ -67,7 +73,7 @@ public class SearchEntryPanel {
     }
 
 
-    public SearchEntryPanel(String theFirstEntry, String theSecondEntry) {
+    public SearchEntryPanel(String theFirstEntry, String theSecondEntry, String theLabel) {
         myPanel = new JPanel(new GridBagLayout());
 
 
@@ -83,26 +89,35 @@ public class SearchEntryPanel {
         endDateLabel.setFont(font);
         mySecondEntry = new JTextField(20);
 
+        JLabel searchLabel = new JLabel(theLabel);
+        searchLabel.setFont(font);
+
+
         // Set preferred size for labels to control their width
         Dimension labelSize = new Dimension(260, 30);
         startDateLabel.setPreferredSize(labelSize);
         endDateLabel.setPreferredSize(labelSize);
+        searchLabel.setPreferredSize(new Dimension(300, 30));
 
         // Add components using GridBagConstraints
         constraints.gridx = 0;
         constraints.gridy = 0;
-        myPanel.add(startDateLabel, constraints);
-
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        myPanel.add(myFirstEntry, constraints);
+        myPanel.add(searchLabel, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        myPanel.add(endDateLabel, constraints);
+        myPanel.add(startDateLabel, constraints);
 
         constraints.gridx = 1;
         constraints.gridy = 1;
+        myPanel.add(myFirstEntry, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        myPanel.add(endDateLabel, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 2;
         myPanel.add(mySecondEntry, constraints);
 
 
@@ -120,7 +135,7 @@ public class SearchEntryPanel {
 
     }
 
-    public SearchEntryPanel(String theFirstEntry, String theSecondEntry, String theThirdEntry) {
+    public SearchEntryPanel(String theFirstEntry, String theSecondEntry, String theThirdEntry, String theLabel) {
         myPanel = new JPanel(new GridBagLayout());
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -136,8 +151,12 @@ public class SearchEntryPanel {
         mySecondEntry = new JTextField(20);
 
         JLabel myThirdEntryLabel = new JLabel(theThirdEntry);
-        mySecondEntryLabel.setFont(font);
+        myThirdEntryLabel.setFont(font);
         myThirdEntry = new JTextField(20);
+
+
+        JLabel mySearchLabel = new JLabel(theLabel);
+        mySearchLabel.setFont(font);
 
 
         // Set preferred size for labels to control their width
@@ -145,34 +164,40 @@ public class SearchEntryPanel {
         myFirstEntryLabel.setPreferredSize(labelSize);
         mySecondEntryLabel.setPreferredSize(labelSize);
         myThirdEntryLabel.setPreferredSize(labelSize);
+        mySearchLabel.setPreferredSize(new Dimension(300, 30));
 
         // Add components using GridBagConstraints
         constraints.gridx = 0;
         constraints.gridy = 0;
+        myPanel.add(mySearchLabel, constraints);
+
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
         myPanel.add(myFirstEntryLabel, constraints);
 
         constraints.gridx = 1;
-        constraints.gridy = 0;
+        constraints.gridy = 1;
         myPanel.add(myFirstEntry, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         myPanel.add(mySecondEntryLabel, constraints);
 
         constraints.gridx = 1;
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         myPanel.add(mySecondEntry, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         myPanel.add(myThirdEntryLabel, constraints);
 
         constraints.gridx = 1;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         myPanel.add(myThirdEntry, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         constraints.gridwidth = 2; // Full width for the button panel
 
         constraints.fill = GridBagConstraints.HORIZONTAL; // Make the panel fill horizontally

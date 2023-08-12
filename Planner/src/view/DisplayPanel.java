@@ -27,7 +27,14 @@ public class DisplayPanel extends JTable {
             columnNames = new String[]{"Assignment ID", "Title", "Professor First Name", "Professor Last Name"};
         } else if (theType == 6) {
             columnNames = new String[]{"User Name", "Total Time"};
+        } else if (theType == 7) {
+            columnNames = new String[]{"User Name", "Total Assignment Count"};
+        } else if (theType == 8) {
+            columnNames = new String[]{"Assignment ID", "Title", "Professor First Name", "Professor Last Name", "Time"};
+        } else if (theType == 9) {
+
         }
+
 
 
         // Convert the ArrayList to a 2D array

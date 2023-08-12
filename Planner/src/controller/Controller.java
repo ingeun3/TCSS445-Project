@@ -203,7 +203,8 @@ public class  Controller{
         myMenuBar.getMySearchButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                     myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : ") ;
+                     myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : ",
+                                                        "Default Search") ;
 
                     mySearchFrame.setCenter((JPanel) myEntry.getPanel());
 
@@ -224,7 +225,10 @@ public class  Controller{
                                         loadJTableOnCompleteSearch(convertStringToSqlDate(myEntry.getMyFirstEntry()), convertStringToSqlDate(myEntry.getMySecondEntry()));
                                     } else if (mySearchType == 6) {
                                         loadJTableOnTotalTimeSearch(convertStringToSqlDate(myEntry.getMyFirstEntry()), convertStringToSqlDate(myEntry.getMySecondEntry()));
+                                    } else if (mySearchType == 7) {
+                                        loadJTableOnTotalAssignmentCount(convertStringToSqlDate(myEntry.getMyFirstEntry()), convertStringToSqlDate(myEntry.getMySecondEntry()));
                                     }
+
                                 mySearchFrame.close();
                             } catch (Exception ex) {
                                 throw new RuntimeException(ex);
@@ -234,6 +238,12 @@ public class  Controller{
             }
         });
 
+        myMenuBar.getMyHideDetailButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadJTableHidingDetail();
+            }
+        });
 
 
     }
@@ -243,7 +253,8 @@ public class  Controller{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : ");
+                myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : "
+                                                , "Default Search");
 
                     mySearchFrame.setCenter((JPanel) myEntry.getPanel());
 
@@ -254,7 +265,8 @@ public class  Controller{
         mySearchFrame.getPriorityButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                     myEntry = new SearchEntryPanel("Priority : ", "Start Date (yyyy-mm-dd) : ");
+                     myEntry = new SearchEntryPanel("Priority : ", "Start Date (yyyy-mm-dd) : "
+                                                    , "Search By Priority");
                     mySearchFrame.setCenter((JPanel) myEntry.getPanel());
                     mySearchType = 2;
             }
@@ -264,7 +276,7 @@ public class  Controller{
             @Override
             public void actionPerformed(ActionEvent e) {
                  myEntry = new SearchEntryPanel("Professor Last Name : ", "Start Date (yyyy-mm-dd) : "
-                        ,"End Date (yyyy-mm-dd) : ");
+                        ,"End Date (yyyy-mm-dd) : ", "Search By Professor");
 
                 mySearchFrame.setCenter((JPanel) myEntry.getPanel());
                 mySearchType = 3;
@@ -274,7 +286,8 @@ public class  Controller{
         mySearchFrame.getTimeButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                 myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : ");
+                 myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : "
+                                                ,"Search By Time");
                 mySearchFrame.setCenter((JPanel) myEntry.getPanel());
                 mySearchType = 4;
             }
@@ -284,7 +297,8 @@ public class  Controller{
         mySearchFrame.getCompletedButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                 myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : ");
+                 myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : "
+                                                    ,"Search Completed Assignment");
                 mySearchFrame.setCenter((JPanel) myEntry.getPanel());
                 mySearchType = 5;
             }
@@ -293,12 +307,33 @@ public class  Controller{
         mySearchFrame.getTotalTimeButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                 myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : ");
+                 myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : "
+                                                         ,"Search Total Hour");
                 mySearchFrame.setCenter(new JPanel());
                 mySearchFrame.setCenter((JPanel) myEntry.getPanel());
                 mySearchType = 6;
             }
         });
+
+        mySearchFrame.getAssignmentCountButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : "
+                                                        , "Search Total Assignment Count");
+                mySearchFrame.setCenter(new JPanel());
+                mySearchFrame.setCenter((JPanel) myEntry.getPanel());
+                mySearchType = 7;
+            }
+        });
+
+        mySearchFrame.getLongerThanAvgButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadJTableOnAssignmentTookLongerThanAvg();
+                mySearchFrame.close();
+            }
+        });
+
     }
 
     public static java.sql.Date convertStringToSqlDate(String strDate) throws ParseException {
@@ -438,6 +473,56 @@ public class  Controller{
             throw new RuntimeException(ex);
         }
         myMainPanel = new DisplayPanel(myData, 6);
+        myLoginFlag = false;
+        myFrame.setCenter(myMainPanel.getMyScrollPane());
+        myLoginPanel.getOkButton().removeAll();
+        myFrame.setNorthPanel(myMenuBar);
+        myMainPanelFlag = true;
+    }
+
+    private void loadJTableOnTotalAssignmentCount(Date theStart, Date theEnd) {
+        try {
+            myData = new SQLQueries().searchNumberOfAssignment(myUsername, theStart, theEnd);
+
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        myMainPanel = new DisplayPanel(myData, 7);
+        myLoginFlag = false;
+        myFrame.setCenter(myMainPanel.getMyScrollPane());
+        myLoginPanel.getOkButton().removeAll();
+        myFrame.setNorthPanel(myMenuBar);
+        myMainPanelFlag = true;
+    }
+    private void loadJTableHidingDetail() {
+        try {
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            // Convert LocalDateTime to java.sql.Date
+            java.sql.Date currentDateAsSqlDate = java.sql.Date.valueOf(currentDateTime.toLocalDate());
+
+            myData = new SQLQueries().minimizeView(myUsername, currentDateAsSqlDate);
+
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+
+        myMainPanel = new DisplayPanel(myData, 2);
+        myLoginFlag = false;
+        myFrame.setCenter(myMainPanel.getMyScrollPane());
+        myLoginPanel.getOkButton().removeAll();
+        myFrame.setNorthPanel(myMenuBar);
+        myMainPanelFlag = true;
+    }
+
+    private void loadJTableOnAssignmentTookLongerThanAvg() {
+        try {
+
+            myData = new SQLQueries().SearchAssignmentTookLongerThanAvg();
+
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        myMainPanel = new DisplayPanel(myData, 8);
         myLoginFlag = false;
         myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();

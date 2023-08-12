@@ -19,6 +19,10 @@ public class SearchFrame {
 
     private JButton myTotalTimeButton;
 
+    private JButton myAssignmentCountButton;
+
+    private JButton myLongerthanAvgButton;
+
     private JPanel myPanel;
     public SearchFrame() {
         myFrame = new JFrame("Add");
@@ -31,6 +35,8 @@ public class SearchFrame {
         myTimeButton = new JButton("Time"); // <- shows each assignment
         myCompletedButton = new JButton("Completed Only");
         myTotalTimeButton = new JButton("Total Time"); // <- shows how much time spent between dates
+        myAssignmentCountButton = new JButton("Assignments Total");
+        myLongerthanAvgButton = new JButton("Assignments Took Longer Than Average");
 
         buttonPanel.add(myDefaultButton);
         buttonPanel.add(myPriorityButton);
@@ -38,6 +44,8 @@ public class SearchFrame {
         buttonPanel.add(myTimeButton);
         buttonPanel.add(myCompletedButton);
         buttonPanel.add(myTotalTimeButton);
+        buttonPanel.add(myAssignmentCountButton);
+        buttonPanel.add(myLongerthanAvgButton);
 
         myFrame.add(buttonPanel, BorderLayout.NORTH);
 
@@ -47,7 +55,7 @@ public class SearchFrame {
 
     }
     public void start() {
-        myFrame.setPreferredSize(new Dimension(600, 500));
+        myFrame.setPreferredSize(new Dimension(800, 500));
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myFrame.pack();
 
@@ -104,8 +112,13 @@ public class SearchFrame {
     public JButton getTotalTimeButton() {
         return myTotalTimeButton;
     }
+    public JButton getAssignmentCountButton() {
+        return myAssignmentCountButton;
+    }
 
-
+    public JButton getLongerThanAvgButton() {
+        return myLongerthanAvgButton;
+    }
 
     public JButton getOkButton() {
         return myOkButton;

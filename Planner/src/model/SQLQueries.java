@@ -395,6 +395,52 @@ public class SQLQueries {
         return res;
     }
 
+    public ArrayList<Object[]> searchNumberOfAssignment(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+        ArrayList<Object[]> res = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
+            String query = "SELECT username, COUNT(title) " +
+                    " FROM ( " +
+                    "    SELECT ut.username, et.title " +
+                    "    FROM " + ServerData.USER_TABLE + " ut " +
+                    "    JOIN " + ServerData.EVENT_TABLE + " et USING (username) " +
+                    "    JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " adt USING (assignment_id) " +
+                    "    WHERE ut.username = ? " +
+                    "        AND adt.due_date >= ? AND adt.due_date <= ? " +
+                    "    UNION " +
+                    "    SELECT ut.username, et.title " +
+                    "    FROM " + ServerData.USER_TABLE + " ut " +
+                    "    JOIN " + ServerData.EVENT_TABLE + " et USING (username) " +
+                    "    JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " adt USING (assignment_id) " +
+                    "    WHERE adt.due_date >= ? AND adt.due_date <= ? " +
+                    " ) AS combined_data " +
+                    " GROUP BY username;";
+
+
+            PreparedStatement checkStatement = connection.prepareStatement(query);
+            checkStatement.setString(1, theUsername);
+            checkStatement.setDate(2, theStartDate);
+            checkStatement.setDate(3, theEndDate);
+            checkStatement.setDate(4, theStartDate);
+            checkStatement.setDate(5, theEndDate);
+
+
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String username = resultSet.getString("username");
+                int count = resultSet.getInt("COUNT(title)");
+
+                Object[] rowData = {username, count};
+                res.add(rowData);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
     public ArrayList<Object[]> minimizeView(String theUsername, Date theStartDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
@@ -405,15 +451,15 @@ public class SQLQueries {
                     " UNION " +
                     " SELECT A.assignment_id, title, prio, due_date " +
                     " FROM " + ServerData.EVENT_TABLE + " E " +
-                    " RIGHT JOIN assignment_detail_table A ON E.assignment_id = A.assignment_id;" +
+                    " RIGHT JOIN assignment_detail_table A ON E.assignment_id = A.assignment_id" +
                     " WHERE E.username = ? AND A.due_date >= ?";
 
 
             PreparedStatement checkStatement = connection.prepareStatement(query);
             checkStatement.setString(1, theUsername);
             checkStatement.setDate(2, theStartDate);
-            checkStatement.setDate(3, theStartDate);
-
+            checkStatement.setString(3, theUsername);
+            checkStatement.setDate(4, theStartDate);
 
             ResultSet resultSet = checkStatement.executeQuery();
 
@@ -461,10 +507,10 @@ public class SQLQueries {
     }
 
 
-    public ArrayList<Object[]> longerThanAvg() throws SQLException {
+    public ArrayList<Object[]> SearchAssignmentTookLongerThanAvg() throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            String query = "SELECT E.title, P.Fname, P.Lname, (TIMEDIFF(T.end_time, T.start_time)) AS time_spent " +
+            String query = "SELECT E.Assignment_id, E.title, P.Fname, P.Lname, (TIMEDIFF(T.end_time, T.start_time)) AS time_spent " +
                     " FROM " + ServerData.EVENT_TABLE + " E " +
                     " NATURAL JOIN " + ServerData.TIME_TABLE + " T " +
                     " NATURAL JOIN " + ServerData.PROF_TABLE + " P " +
@@ -485,12 +531,13 @@ public class SQLQueries {
             ResultSet resultSet = checkStatement.executeQuery();
 
             while (resultSet.next()) {
+                int assignment_id =  resultSet.getInt("assignment_id");
                 String title = resultSet.getString("title");
                 String fname = resultSet.getString("Fname");
                 String lname = resultSet.getString("Lname");
-                int timeSpent = resultSet.getInt("time_spent");
+                String timeSpent = resultSet.getString("time_spent");
 
-                Object[] rowData = {title, fname, lname, timeSpent};
+                Object[] rowData = {assignment_id, title, fname, lname, timeSpent};
                 res.add(rowData);
             }
         } catch (SQLException e) {
@@ -501,49 +548,5 @@ public class SQLQueries {
 
 
 
-    public ArrayList<Object[]> countNumberOfAssignment(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
-        ArrayList<Object[]> res = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            String query = "SELECT username, COUNT(title) " +
-                    " FROM ( " +
-                    "    SELECT ut.username, et.title " +
-                    "    FROM " + ServerData.USER_TABLE + " ut " +
-                    "    JOIN " + ServerData.EVENT_TABLE + " et USING (username) " +
-                    "    JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " adt USING (assignment_id) " +
-                    "    WHERE ut.username = ? " +
-                    "        AND adt.due_date >= ? AND adt.due_date <= ? " +
-                    "    UNION " +
-                    "    SELECT ut.username, et.title " +
-                    "    FROM " + ServerData.USER_TABLE + " ut " +
-                    "    JOIN " + ServerData.EVENT_TABLE + " et USING (username) " +
-                    "    JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " adt USING (assignment_id) " +
-                    "    WHERE adt.due_date >= ? AND adt.due_date <= ? " +
-                    " ) AS combined_data " +
-                    " GROUP BY username;";
 
-
-            PreparedStatement checkStatement = connection.prepareStatement(query);
-            checkStatement.setString(1, theUsername);
-            checkStatement.setDate(2, theStartDate);
-            checkStatement.setDate(3, theEndDate);
-            checkStatement.setDate(4, theStartDate);
-            checkStatement.setDate(5, theEndDate);
-
-
-            ResultSet resultSet = checkStatement.executeQuery();
-
-            while (resultSet.next()) {
-                String username = resultSet.getString("username");
-                int count = resultSet.getInt("COUNT(title)");
-
-                Object[] rowData = {username, count};
-                res.add(rowData);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return res;
-    }
 }

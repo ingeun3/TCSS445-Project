@@ -9,15 +9,24 @@ public class MenuBar extends JPanel{
 
     private JButton mySearchButton;
 
+    private JButton myHideDetailButton;
+
+    private JButton myAvgTimePerProfButton;
+
+    private JButton mySearchAssignmentTookLongerButton;
+
     public MenuBar (){
         myAddButton = new JButton("Add");
         myDeleteButton = new JButton("Delete");
         myEditButton = new JButton("Apply Changes");
         mySearchButton = new JButton("Search");
+        myHideDetailButton = new JButton("Hide Details");
+
         add(myAddButton);
         add(myDeleteButton);
         add(myEditButton);
         add(mySearchButton);
+        add(myHideDetailButton);
     }
 
     public JButton getMyAddButton() {
@@ -32,5 +41,9 @@ public class MenuBar extends JPanel{
 
     public JButton getMySearchButton() {
         return mySearchButton;
+    }
+
+    public JButton getMyHideDetailButton() {
+        return myHideDetailButton;
     }
 }
