@@ -128,7 +128,7 @@ public class SQLQueries {
                     " JOIN " + ServerData.TIME_TABLE + " T ON A.assignment_id = T.assignment_id" +
                     " JOIN " + ServerData.PROF_TABLE + " P ON T.assignment_id = P.assignment_id" +
                     " WHERE username = ? AND A.due_date >= ? AND A.due_date <= ?" +
-                    "ORDER BY due_date , prio DESC";
+                    " ORDER BY due_date , completed ASC, prio DESC;";
 
 
             PreparedStatement checkStatement = connection.prepareStatement(query);

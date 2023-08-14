@@ -203,6 +203,7 @@ public class  Controller{
                         SQLQueries temp = new SQLQueries();
                         temp.editRow(id, selectedColumn, newValue);
                     }
+                    loadJTable();
                     clicked++;
                 } else {
                     clicked++;
