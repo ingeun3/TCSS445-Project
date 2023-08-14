@@ -131,12 +131,22 @@ public class  Controller{
 
             }
         });
-
+        myMenuBar.getMyHomeButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (clicked % 2 == 1) {
+                    loadJTable();
+                    clicked++;
+                } else {
+                    clicked++;
+                }
+            }
+        });
         myMenuBar.getMyAddButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (clicked % 2 == 1) {
-                    EventCreatingPanel event = new EventCreatingPanel();
+                    EventCreatingFrame event = new EventCreatingFrame();
                     event.getOkButton().addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -334,6 +344,13 @@ public class  Controller{
             }
         });
 
+        mySearchFrame.getProfAvgButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadJTableOnProfAverage();
+                mySearchFrame.close();
+            }
+        });
     }
 
     public static java.sql.Date convertStringToSqlDate(String strDate) throws ParseException {
@@ -351,6 +368,10 @@ public class  Controller{
             } else if (newUser.getMyOutput() == 2) {
                 JOptionPane.showMessageDialog(myFrame,
                         "Account created successfully!");
+                myLoginFlag = true;
+                myFrame.setCenter(myLoginPanel);
+                myCreateAccountFlag = false;
+                myCreateAccountPanel.getOkButton().removeAll();
             } else {
                 JOptionPane.showMessageDialog(myFrame,
                         "Account failed to create");
@@ -529,4 +550,18 @@ public class  Controller{
         myFrame.setNorthPanel(myMenuBar);
         myMainPanelFlag = true;
     }
+    private void loadJTableOnProfAverage() {
+        try {
+            myData = new SQLQueries().avgTimeSpentForProf();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        myMainPanel = new DisplayPanel(myData, 9);
+        myLoginFlag = false;
+        myFrame.setCenter(myMainPanel.getMyScrollPane());
+        myLoginPanel.getOkButton().removeAll();
+        myFrame.setNorthPanel(myMenuBar);
+        myMainPanelFlag = true;
+    }
+
 }

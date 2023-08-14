@@ -1,120 +1,11 @@
 package model;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 
 public class SQLQueries {
-    private ArrayList<String> myEventTitles = new ArrayList<String>();
-    private ArrayList<Object[]> res = new ArrayList<>();
-
-
-    public ArrayList<String> getTitle(String theUsername) throws ClassNotFoundException {
-
-        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            Class.forName("com.mysql.jdbc.Driver");
-            Statement statement = connection.createStatement();
-            String query = "SELECT title FROM " + ServerData.EVENT_TABLE + " WHERE username = " + theUsername;
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                String title = resultSet.getString("title");
-                myEventTitles.add(title);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return myEventTitles;
-    }
-
-
-    public int getAssignmentID(String theUsername, String theAssignmentTitle) throws ClassNotFoundException {
-        int res = -1;
-        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            Class.forName("com.mysql.jdbc.Driver");
-            Statement statement = connection.createStatement();
-            String query = "SELECT assignment_id FROM " + ServerData.EVENT_TABLE + " WHERE username = " + theUsername
-                            + " and assignment_title = " + theAssignmentTitle;
-            ResultSet resultSet = statement.executeQuery(query);
-            res = resultSet.getInt("assignment_id");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    public int getPrio(int theAssignmentID) throws ClassNotFoundException {
-        int res = -1;
-        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            Class.forName("com.mysql.jdbc.Driver");
-            Statement statement = connection.createStatement();
-            String query = "SELECT priority FROM " + ServerData.ASSIGNMENT_DETAIL_TABLE + " WHERE assignment_id = " + theAssignmentID;
-            ResultSet resultSet = statement.executeQuery(query);
-            res = resultSet.getInt("priority");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    public Date getDate(int theAssignmentID) throws ClassNotFoundException {
-        Date res = null;
-        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            Class.forName("com.mysql.jdbc.Driver");
-            Statement statement = connection.createStatement();
-            String query = "SELECT due FROM " + ServerData.ASSIGNMENT_DETAIL_TABLE + " WHERE assignment_id = " + theAssignmentID;
-            ResultSet resultSet = statement.executeQuery(query);
-            res = resultSet.getDate("due");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    public String getProf(int theAssignmentID) throws ClassNotFoundException {
-
-        String res = null;
-        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            Class.forName("com.mysql.jdbc.Driver");
-            Statement statement = connection.createStatement();
-            String query = "SELECT professor FROM " + ServerData.PROF_TABLE + " WHERE assignment_id = " + theAssignmentID;
-            ResultSet resultSet = statement.executeQuery(query);
-            res = resultSet.getString("professor");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    public Time getStart(int theAssignmentID) throws ClassNotFoundException {
-
-        Time res = null;
-        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            Class.forName("com.mysql.jdbc.Driver");
-            Statement statement = connection.createStatement();
-            String query = "SELECT start FROM " + ServerData.TIME_TABLE + " WHERE assignment_id = " + theAssignmentID;
-            ResultSet resultSet = statement.executeQuery(query);
-            res = resultSet.getTime("start");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    public Time getEnd(int theAssignmentID) throws ClassNotFoundException {
-
-        Time res = null;
-        try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            Class.forName("com.mysql.jdbc.Driver");
-            Statement statement = connection.createStatement();
-            String query = "SELECT end FROM " + ServerData.TIME_TABLE + " WHERE assignment_id = " + theAssignmentID;
-            ResultSet resultSet = statement.executeQuery(query);
-            res = resultSet.getTime("end");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-    public int getLastUsedAssignmentID() throws ClassNotFoundException {
+    public int getLastUsedAssignmentID() {
         int res = -1;
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             Statement statement = connection.createStatement();
@@ -180,16 +71,48 @@ public class SQLQueries {
 
             PreparedStatement statement = connection.prepareStatement(query);
 
+            if(theCol == 8) {
+                if (theNewValue.equals("true")) {
+                    statement.setInt(1, 1);
+                    statement.setString(2, String.valueOf(theAssignmentID));
 
-            statement.setString(1, String.valueOf(theNewValue));
-            statement.setString(2, String.valueOf(theAssignmentID));
+                    int rowsDeleted = statement.executeUpdate();
 
-            int rowsDeleted = statement.executeUpdate();
+                    if (rowsDeleted > 0) {
+                        JOptionPane.showMessageDialog(null,
+                                "Edit Saved Successfully!");
+                    }
 
-            if (rowsDeleted > 0) {
-                System.out.println("Row deleted successfully.");
+                } else if (theNewValue.equals("false")) {
+                    statement.setInt(1, 0);
+                    statement.setString(2, String.valueOf(theAssignmentID));
+
+                    int rowsDeleted = statement.executeUpdate();
+
+                    if (rowsDeleted > 0) {
+                        JOptionPane.showMessageDialog(null,
+                                "Edit Saved Successfully!");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "Invalid Entry!");
+                }
+
+
             } else {
-                System.out.println("No rows deleted.");
+                statement.setString(1, String.valueOf(theNewValue));
+                statement.setString(2, String.valueOf(theAssignmentID));
+
+                int rowsDeleted = statement.executeUpdate();
+
+                if (rowsDeleted > 0) {
+                    JOptionPane.showMessageDialog(null,
+                            "Edit Saved Successfully!");
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "Edit Failed!");
+                }
+
             }
 
         } catch (SQLException e) {
@@ -204,7 +127,8 @@ public class SQLQueries {
                     " JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " A ON E.assignment_id = A.assignment_id" +
                     " JOIN " + ServerData.TIME_TABLE + " T ON A.assignment_id = T.assignment_id" +
                     " JOIN " + ServerData.PROF_TABLE + " P ON T.assignment_id = P.assignment_id" +
-                    " WHERE username = ? AND A.due_date >= ? AND A.due_date <= ?";
+                    " WHERE username = ? AND A.due_date >= ? AND A.due_date <= ?" +
+                    "ORDER BY due_date , prio DESC";
 
 
             PreparedStatement checkStatement = connection.prepareStatement(query);
@@ -413,8 +337,8 @@ public class SQLQueries {
                     "    JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " adt USING (assignment_id) " +
                     "    WHERE adt.due_date >= ? AND adt.due_date <= ? " +
                     " ) AS combined_data " +
-                    " GROUP BY username;";
-
+                    " WHERE username = ?" +
+                    " GROUP BY username";
 
             PreparedStatement checkStatement = connection.prepareStatement(query);
             checkStatement.setString(1, theUsername);
@@ -422,7 +346,7 @@ public class SQLQueries {
             checkStatement.setDate(3, theEndDate);
             checkStatement.setDate(4, theStartDate);
             checkStatement.setDate(5, theEndDate);
-
+            checkStatement.setString(6, theUsername);
 
             ResultSet resultSet = checkStatement.executeQuery();
 
@@ -495,7 +419,7 @@ public class SQLQueries {
             while (resultSet.next()) {
                 String fname = resultSet.getString("Fname");
                 String lname = resultSet.getString("Lname");
-                int avgTime = resultSet.getInt("average_time_per_assignment");
+                String avgTime = resultSet.getString("average_time_per_assignment");
 
                 Object[] rowData = {fname, lname, avgTime};
                 res.add(rowData);

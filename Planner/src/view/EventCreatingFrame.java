@@ -5,7 +5,7 @@ import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class EventCreatingPanel {
+public class EventCreatingFrame {
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     private JTextField titleField;
@@ -28,7 +28,7 @@ public class EventCreatingPanel {
     private JPanel myPanel;
 
 
-    public EventCreatingPanel() {
+    public EventCreatingFrame() {
         myPanel = new JPanel(new GridBagLayout());
 
 
@@ -165,6 +165,7 @@ public class EventCreatingPanel {
         int centerY = (screenSize.height - myFrame.getHeight()) / 2;
         myFrame.setLocation(centerX, centerY);
 
+        myFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         myFrame.pack();
         myFrame.setVisible(true);
     }

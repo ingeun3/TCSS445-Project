@@ -23,12 +23,14 @@ public class SearchFrame {
 
     private JButton myLongerthanAvgButton;
 
+    private JButton myProfAvgButton;
+
     private JPanel myPanel;
     public SearchFrame() {
         myFrame = new JFrame("Add");
         myOkButton =  new JButton("Ok");
         myPanel = new JPanel();
-        JPanel buttonPanel = new JPanel();
+        //JPanel buttonPanel = new JPanel();
         myDefaultButton = new JButton("Default");
         myPriorityButton = new JButton("Priority");
         myProfessorButton = new JButton("Professor");
@@ -37,25 +39,35 @@ public class SearchFrame {
         myTotalTimeButton = new JButton("Total Time"); // <- shows how much time spent between dates
         myAssignmentCountButton = new JButton("Assignments Total");
         myLongerthanAvgButton = new JButton("Assignments Took Longer Than Average");
+        myProfAvgButton = new JButton("Professor Average Time");
 
-        buttonPanel.add(myDefaultButton);
-        buttonPanel.add(myPriorityButton);
-        buttonPanel.add(myProfessorButton);
-        buttonPanel.add(myTimeButton);
-        buttonPanel.add(myCompletedButton);
-        buttonPanel.add(myTotalTimeButton);
-        buttonPanel.add(myAssignmentCountButton);
-        buttonPanel.add(myLongerthanAvgButton);
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 1)); // Use GridLayout with 2 rows and 1 column
+
+        // First row of buttons
+        JPanel firstRowPanel = new JPanel();
+        firstRowPanel.add(myDefaultButton);
+        firstRowPanel.add(myPriorityButton);
+        firstRowPanel.add(myProfessorButton);
+        firstRowPanel.add(myTotalTimeButton);
+        firstRowPanel.add(myAssignmentCountButton);
+        firstRowPanel.add(myTimeButton);
+
+        // Second row of buttons
+        JPanel secondRowPanel = new JPanel();
+        secondRowPanel.add(myCompletedButton);
+        secondRowPanel.add(myLongerthanAvgButton);
+        secondRowPanel.add(myProfAvgButton);
+
+        // Add the rows to the main button panel
+        buttonPanel.add(firstRowPanel);
+        buttonPanel.add(secondRowPanel);
 
         myFrame.add(buttonPanel, BorderLayout.NORTH);
-
         myFrame.add(myPanel, BorderLayout.CENTER);
-
-
 
     }
     public void start() {
-        myFrame.setPreferredSize(new Dimension(800, 500));
+        myFrame.setPreferredSize(new Dimension(750, 500));
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myFrame.pack();
 
@@ -80,6 +92,7 @@ public class SearchFrame {
         myPanel.add(buttonPanel, constraints);
 
 
+        myFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         myFrame.pack();
         myFrame.setVisible(true);
@@ -115,14 +128,16 @@ public class SearchFrame {
     public JButton getAssignmentCountButton() {
         return myAssignmentCountButton;
     }
-
     public JButton getLongerThanAvgButton() {
         return myLongerthanAvgButton;
     }
-
+    public JButton getProfAvgButton() {
+        return myProfAvgButton;
+    }
     public JButton getOkButton() {
         return myOkButton;
     }
+
     public void close() {
         myFrame.dispose();
     }

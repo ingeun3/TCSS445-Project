@@ -32,7 +32,7 @@ public class DisplayPanel extends JTable {
         } else if (theType == 8) {
             columnNames = new String[]{"Assignment ID", "Title", "Professor First Name", "Professor Last Name", "Time"};
         } else if (theType == 9) {
-
+            columnNames = new String[]{"Professor First Name", "Professor Last Name", "Average Time Per Assignment"};
         }
 
 
