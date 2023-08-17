@@ -2,21 +2,24 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
+/**
+ * This class creates login panel to allow user to login.
+ *
+ * @author Ingeun Hwang, Khin Win
+ *
+ */
 public class LoginPanel extends JPanel {
+
+    /** The JTextField object for username input. */
     private JTextField usernameField;
+    /** The JTextField object for password input. */
     private JPasswordField passwordField;
-
-    private boolean myOkayPressed;
-
-    private boolean myCreateAccountPressed;
-
+    /** The Ok button to finalize the user input */
     private JButton myOkButton;
-
+    /** The Create button to change the Center GUI component in GUIFrame */
     private JButton myCreateNewButton;
 
+    /** The default constructor for LoginPanel */
     public LoginPanel() {
         setLayout(new GridBagLayout());
 
@@ -35,12 +38,10 @@ public class LoginPanel extends JPanel {
         myOkButton = new JButton("Ok");
         myCreateNewButton = new JButton("Create an account");
 
-        // Set preferred size for labels to control their width
         Dimension labelSize = new Dimension(120, 30);
         usernameLabel.setPreferredSize(labelSize);
         passwordLabel.setPreferredSize(labelSize);
 
-        // Add components using GridBagConstraints
         constraints.gridx = 0;
         constraints.gridy = 0;
         add(usernameLabel, constraints);
@@ -63,41 +64,24 @@ public class LoginPanel extends JPanel {
 
         constraints.gridx = 0;
         constraints.gridy = 2;
-        constraints.gridwidth = 2; // Full width for the button panel
-        //constraints.fill = GridBagConstraints.HORIZONTAL; // Make the panel fill horizontally
-        //constraints.weightx = 1.0; // Allow the panel to expand horizontally
+        constraints.gridwidth = 2;
+
         add(buttonPanel, constraints);
     }
 
+    /** The getter for the user input in the usernameField. */
     public String getUsername() {
         return usernameField.getText();
     }
-
+    /** The getter for the user input in the passwordField. */
     public String getPassword() {
         return new String(passwordField.getPassword());
     }
-
-//    public JTextField getUsernameField() {
-//        return usernameField;
-//    }
-//
-//    public JPasswordField getPasswordField() {
-//        return passwordField;
-//    }
-//
-//    public boolean getOkayStatus() {
-//        boolean temp = myOkayPressed;
-//        myOkayPressed = false;
-//        return temp;
-//    }
-//    public boolean getCreateAccountStatus() {
-//        boolean temp = myCreateAccountPressed;
-//        myCreateAccountPressed = false;
-//        return temp;
-//    }
+    /** The getter for the ok button. */
     public JButton getOkButton() {
         return myOkButton;
     }
+    /** The getter for the create button. */
     public JButton getCreateNewButton() {
         return myCreateNewButton;
     }

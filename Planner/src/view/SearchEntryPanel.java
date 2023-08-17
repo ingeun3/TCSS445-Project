@@ -3,29 +3,30 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This class creates panel that will allow user to input entry for the search frame.
+ *
+ * @author Ingeun Hwang, Khin Win
+ *
+ */
 public class SearchEntryPanel {
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
+    /** The JTextField object for first entry input. */
     private JTextField myFirstEntry;
+    /** The JTextField object for second entry input. */
     private JTextField mySecondEntry;
-
+    /** The JTextField object for third entry input. */
     private JTextField myThirdEntry;
-
-
-    private boolean myOkayPressed;
-
-    private String myUsername;
-
-
-
+    /** The JPanel that will contain the layout of the GUI. */
     private JPanel myPanel;
 
-
-
-
+    /**
+     * The constructor for SearchEntryPanel with single entry.
+     * @param theFirstEntry The user input for first entry.
+     * @param theLabel The label of the search
+     */
     public SearchEntryPanel(String theFirstEntry, String theLabel) {
         myPanel = new JPanel(new GridBagLayout());
-
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(10, 10, 10, 10);
@@ -38,12 +39,10 @@ public class SearchEntryPanel {
         JLabel searchLabel = new JLabel(theLabel);
         searchLabel.setFont(font);
 
-        // Set preferred size for labels to control their width
         Dimension labelSize = new Dimension(260, 30);
         startDateLabel.setPreferredSize(labelSize);
         searchLabel.setPreferredSize(new Dimension(300, 30));
 
-        // Add components using GridBagConstraints
         constraints.gridx = 0;
         constraints.gridy = 0;
         myPanel.add(searchLabel, constraints);
@@ -59,23 +58,25 @@ public class SearchEntryPanel {
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.gridwidth = 2; // Full width for the button panel
+        constraints.gridwidth = 2;
 
-        constraints.fill = GridBagConstraints.HORIZONTAL; // Make the panel fill horizontally
-        constraints.weightx = 1.0; // Allow the panel to expand horizontally
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1.0;
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
 
         myPanel.add(buttonPanel, constraints);
 
-
-
     }
 
-
+    /**
+     * The constructor for SearchEntryPanel with two entries.
+     * @param theFirstEntry The user input for first entry
+     * @param theSecondEntry The user input for second entry
+     * @param theLabel The label of the search
+     */
     public SearchEntryPanel(String theFirstEntry, String theSecondEntry, String theLabel) {
         myPanel = new JPanel(new GridBagLayout());
-
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(10, 10, 10, 10);
@@ -92,14 +93,11 @@ public class SearchEntryPanel {
         JLabel searchLabel = new JLabel(theLabel);
         searchLabel.setFont(font);
 
-
-        // Set preferred size for labels to control their width
         Dimension labelSize = new Dimension(260, 30);
         startDateLabel.setPreferredSize(labelSize);
         endDateLabel.setPreferredSize(labelSize);
         searchLabel.setPreferredSize(new Dimension(300, 30));
 
-        // Add components using GridBagConstraints
         constraints.gridx = 0;
         constraints.gridy = 0;
         myPanel.add(searchLabel, constraints);
@@ -120,14 +118,12 @@ public class SearchEntryPanel {
         constraints.gridy = 2;
         myPanel.add(mySecondEntry, constraints);
 
-
-
         constraints.gridx = 0;
         constraints.gridy = 2;
-        constraints.gridwidth = 2; // Full width for the button panel
+        constraints.gridwidth = 2;
 
-        constraints.fill = GridBagConstraints.HORIZONTAL; // Make the panel fill horizontally
-        constraints.weightx = 1.0; // Allow the panel to expand horizontally
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1.0;
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         myPanel.add(buttonPanel, constraints);
@@ -135,6 +131,13 @@ public class SearchEntryPanel {
 
     }
 
+    /**
+     * The constructor for SearchEntryPanel with three entries.
+     * @param theFirstEntry The user input for first entry.
+     * @param theSecondEntry The user input for second entry.
+     * @param theThirdEntry The user input for third entry.
+     * @param theLabel The label for search.
+     */
     public SearchEntryPanel(String theFirstEntry, String theSecondEntry, String theThirdEntry, String theLabel) {
         myPanel = new JPanel(new GridBagLayout());
 
@@ -158,19 +161,15 @@ public class SearchEntryPanel {
         JLabel mySearchLabel = new JLabel(theLabel);
         mySearchLabel.setFont(font);
 
-
-        // Set preferred size for labels to control their width
         Dimension labelSize = new Dimension(260, 30);
         myFirstEntryLabel.setPreferredSize(labelSize);
         mySecondEntryLabel.setPreferredSize(labelSize);
         myThirdEntryLabel.setPreferredSize(labelSize);
         mySearchLabel.setPreferredSize(new Dimension(300, 30));
 
-        // Add components using GridBagConstraints
         constraints.gridx = 0;
         constraints.gridy = 0;
         myPanel.add(mySearchLabel, constraints);
-
 
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -198,29 +197,28 @@ public class SearchEntryPanel {
 
         constraints.gridx = 0;
         constraints.gridy = 4;
-        constraints.gridwidth = 2; // Full width for the button panel
+        constraints.gridwidth = 2;
 
-        constraints.fill = GridBagConstraints.HORIZONTAL; // Make the panel fill horizontally
-        constraints.weightx = 1.0; // Allow the panel to expand horizontally
-
-
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1.0;
 
     }
 
+    /** Getter for myPanel. */
     public JPanel getPanel() {
         return myPanel;
     }
-
-    public String getMyFirstEntry() throws Exception {
+    /** Getter for user input in the first entry. */
+    public String getMyFirstEntry() {
         return myFirstEntry.getText();
     }
-
-    public String getMySecondEntry() throws Exception {
+    /** Getter for user input in the second entry. */
+    public String getMySecondEntry() {
         return  mySecondEntry.getText();
     }
-    public String getMyThirdEntry() throws Exception {
+    /** Getter for user input in the third entry. */
+    public String getMyThirdEntry() {
         return  myThirdEntry.getText();
     }
-
 
 }

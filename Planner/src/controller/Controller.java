@@ -10,7 +10,6 @@ import view.MenuBar;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -188,7 +187,7 @@ public class  Controller{
             }
         });
 
-        myMenuBar.getMyEditButton().addActionListener(new ActionListener() {
+        myMenuBar.getMyApplyChangeButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(clicked % 2 == 1) {
@@ -445,7 +444,6 @@ public class  Controller{
         myMainPanel = new DisplayPanel(myData, 2);
         myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();
-        myFrame.setNorthPanel(myMenuBar);
 
     }
 
@@ -460,7 +458,6 @@ public class  Controller{
         myMainPanel = new DisplayPanel(myData, 3);
         myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();
-        myFrame.setNorthPanel(myMenuBar);
     }
 
     private void loadJTableOnTimeSearch(Date theStart, Date theEnd) {
@@ -474,7 +471,7 @@ public class  Controller{
         myMainPanel = new DisplayPanel(myData, 4);
         myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();
-        myFrame.setNorthPanel(myMenuBar);
+
     }
 
     private void loadJTableOnCompleteSearch(Date theStart, Date theEnd) {
@@ -487,7 +484,6 @@ public class  Controller{
         myMainPanel = new DisplayPanel(myData, 5);
         myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();
-        myFrame.setNorthPanel(myMenuBar);
     }
 
     private void loadJTableOnTotalTimeSearch(Date theStart, Date theEnd) {
@@ -500,7 +496,6 @@ public class  Controller{
         myMainPanel = new DisplayPanel(myData, 6);
         myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();
-        myFrame.setNorthPanel(myMenuBar);
     }
 
     private void loadJTableOnTotalAssignmentCount(Date theStart, Date theEnd) {
@@ -513,7 +508,6 @@ public class  Controller{
         myMainPanel = new DisplayPanel(myData, 7);
         myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();
-        myFrame.setNorthPanel(myMenuBar);
     }
     private void loadJTableHidingDetail() {
         try {
@@ -530,7 +524,6 @@ public class  Controller{
         myMainPanel = new DisplayPanel(myData, 2);
         myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();
-        myFrame.setNorthPanel(myMenuBar);
     }
 
     private void loadJTableOnAssignmentTookLongerThanAvg() {
@@ -544,7 +537,6 @@ public class  Controller{
         myMainPanel = new DisplayPanel(myData, 8);
         myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();
-        myFrame.setNorthPanel(myMenuBar);
     }
     private void loadJTableOnProfAverage() {
         try {
@@ -555,7 +547,6 @@ public class  Controller{
         myMainPanel = new DisplayPanel(myData, 9);
         myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();
-        myFrame.setNorthPanel(myMenuBar);
     }
 
 }

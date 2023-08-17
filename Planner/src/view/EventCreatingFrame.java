@@ -4,28 +4,33 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
+/**
+ * This class creates JFrame to allow user to add assignment to the database.
+ *
+ * @author Ingeun Hwang, Khin Win
+ *
+ */
 public class EventCreatingFrame {
+    /** The date format. */
     private static final String DATE_FORMAT = "yyyy-MM-dd";
-
+    /** The JTextField object for title input. */
     private JTextField titleField;
+    /** The JTextField object for assignment priority input. */
     private JTextField assignmentPriorityField;
+    /** The JTextField object for due date input. */
     private JTextField dueDateField;
+    /** The JTextField object for professor first name input. */
     private JTextField professorFirstNameField;
+    /** The JTextField object for professor last name input. */
     private JTextField professorLastNameField;
-
-
-    private boolean myOkayPressed;
-
-    private String myUsername;
-
+    /** The ok button to finalize user input. */
     private JButton myOkButton;
-
+    /** The JFrame to display the class. */
     private JFrame myFrame;
-
+    /** The JPanel that will contain the layout of the frame. */
     private JPanel myPanel;
 
-
+    /** The default constructor for EventCreatingFrame. */
     public EventCreatingFrame() {
         myPanel = new JPanel(new GridBagLayout());
 
@@ -53,11 +58,8 @@ public class EventCreatingFrame {
         professorLastNameLabel.setFont(font);
         professorLastNameField = new JTextField(20);
 
-
         myOkButton =  new JButton("Ok");
 
-
-        // Set preferred size for labels to control their width
         Dimension labelSize = new Dimension(215, 30);
         titleLabel.setPreferredSize(labelSize);
         assignmentPriorityLabel.setPreferredSize(labelSize);
@@ -65,7 +67,6 @@ public class EventCreatingFrame {
         professorFirstNameLabel.setPreferredSize(labelSize);
         professorLastNameLabel.setPreferredSize(labelSize);
 
-        // Add components using GridBagConstraints
         constraints.gridx = 0;
         constraints.gridy = 0;
         myPanel.add(titleLabel, constraints);
@@ -108,10 +109,10 @@ public class EventCreatingFrame {
 
         constraints.gridx = 0;
         constraints.gridy = 6;
-        constraints.gridwidth = 2; // Full width for the button panel
+        constraints.gridwidth = 2;
 
         constraints.fill = GridBagConstraints.HORIZONTAL; // Make the panel fill horizontally
-        constraints.weightx = 1.0; // Allow the panel to expand horizontally
+        constraints.weightx = 1.0;
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         buttonPanel.add(myOkButton);
@@ -120,6 +121,8 @@ public class EventCreatingFrame {
         myFrame = new JFrame("Add");
         start();
     }
+
+    /** Starts the GUI */
     private void start() {
         myFrame.add(myPanel);
         myFrame.setPreferredSize(new Dimension(600, 500));
@@ -128,10 +131,8 @@ public class EventCreatingFrame {
         ImageIcon icon = new ImageIcon("./up.png");
         Image largeImage = icon.getImage().getScaledInstance(15, -1,
                 java.awt.Image.SCALE_SMOOTH);
-        // Set the icon for the JFrame
 
         myFrame.setIconImage(largeImage);
-      // Center the JFrame on the screen
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int centerX = (screenSize.width - myFrame.getWidth()) / 2;
         int centerY = (screenSize.height - myFrame.getHeight()) / 2;
@@ -142,38 +143,38 @@ public class EventCreatingFrame {
         myFrame.setVisible(true);
     }
 
+    /** Getter for input in the title field. */
     public JTextField getTitleField() {
         return titleField;
     }
+    /** Getter for input in the assignment priority field. */
     public JTextField getAssignmentPriorityField() {
         return assignmentPriorityField;
     }
+    /** Getter for input in the professor first name field. */
     public JTextField getProfessorFirstNameField() {
         return professorFirstNameField;
     }
+    /** Getter for input in the professor last name field. */
     public JTextField getProfessorLastNameField() {
         return professorLastNameField;
     }
-
+    /** Getter for input in the due date field. */
     public java.sql.Date getDueDate() throws Exception {
         String dateString = dueDateField.getText();
         return convertStringToSqlDate(dateString);
     }
+    /** converts string input into SQL date format */
     public static java.sql.Date convertStringToSqlDate(String strDate) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         java.util.Date parsedDate = dateFormat.parse(strDate);
         return new java.sql.Date(parsedDate.getTime());
     }
-
-
-    public java.sql.Time formatStringToSQLTime(String strTime) throws ParseException {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        java.util.Date parsedTime = timeFormat.parse(strTime);
-        return new java.sql.Time(parsedTime.getTime());
-    }
+    /** Getter for Ok button. */
     public JButton getOkButton() {
         return myOkButton;
     }
+    /** Closes the GUI*/
     public void close() {
         myFrame.dispose();
     }

@@ -3,16 +3,27 @@ package view;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
-
+/**
+ * This class creates JTable object that will display data
+ *
+ * @author Ingeun Hwang, Khin Win
+ *
+ */
 public class DisplayPanel extends JTable {
+    /** The JTable that will display data from database. */
     private JTable myTable;
-
+    /** The JScrollPane for JTable object. */
     private JScrollPane myScrollPane;
-
+    /** The DefaultTableModel for JTable object. */
     private DefaultTableModel myModel;
-
+    /** The Title of the columns. */
     private String[] columnNames;
 
+    /**
+     * The Default constructor for DisplayPanel object.
+     * @param SQLData The List of data from database
+     * @param theType The type of JTable to display.
+     */
     public DisplayPanel(ArrayList<Object[]> SQLData, int theType) {
         super();
         if(theType == 1) {
@@ -35,8 +46,6 @@ public class DisplayPanel extends JTable {
             columnNames = new String[]{"Professor First Name", "Professor Last Name", "Average Time Per Assignment"};
         }
 
-
-
         // Convert the ArrayList to a 2D array
         Object[][] data = new Object[SQLData.size()][];
         for (int i = 0; i < SQLData.size(); i++) {
@@ -44,10 +53,8 @@ public class DisplayPanel extends JTable {
         }
 
         myModel = new DefaultTableModel(data, columnNames) {
-            // Override isCellEditable to selectively make cells editable
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Allow editing only for the "Age" column (column index 2)
                 return column == 1 || column == 2 || column ==  3 || column == 4 || column == 5 || column == 6 || column == 7
                         || column == 8;
             }
@@ -57,13 +64,15 @@ public class DisplayPanel extends JTable {
 
     }
 
+    /** The getter for myScrollPane. */
     public JScrollPane getMyScrollPane() {
         return myScrollPane;
     }
-
+    /** The getter for myTable. */
     public JTable getTable() {
         return  myTable;
     }
+    /** The getter for DefaultTableMode. */
     public DefaultTableModel getModel() {
         return myModel;
     }
