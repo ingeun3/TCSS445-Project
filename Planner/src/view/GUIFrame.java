@@ -22,7 +22,7 @@ public class GUIFrame extends JFrame {
          *
          */
         private GUIFrame()  {
-            super("Planner!");
+            super("Priority Planner");
             myCenterPanel = new JPanel();
           //  setIconImage(new ImageIcon("./resources/visuals/up.png").getImage());
         }
@@ -44,6 +44,14 @@ public class GUIFrame extends JFrame {
          */
         public void start() {
 //            setPreferredSize(new Dimension(800, 60));
+
+            ImageIcon icon = new ImageIcon("./up.png");
+            Image largeImage = icon.getImage().getScaledInstance(15, -1,
+                    java.awt.Image.SCALE_SMOOTH);
+            // Set the icon for the JFrame
+
+            setIconImage(largeImage);
+
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLocationRelativeTo(null);
             setVisible(true);
@@ -80,7 +88,6 @@ public class GUIFrame extends JFrame {
         public void setCenter(final JComponent thePanel) {
             getContentPane().remove(myCenterPanel);
             myCenterPanel = thePanel;
-            revalidate();
             repaint();
             getContentPane().add(myCenterPanel, BorderLayout.CENTER);
             thePanel.requestFocus();
