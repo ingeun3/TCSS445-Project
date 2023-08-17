@@ -49,9 +49,6 @@ public class  Controller{
     // initialized myUsername.
     private String myUsername;
 
-    // initialized myPassword.
-    private String myPassword;
-
     // initialized mySearchType.
     private int mySearchType;
 
@@ -82,7 +79,6 @@ public class  Controller{
         myMenuBar = new MenuBar();
         // assign myUsername and myPassword to empty string.
         myUsername = "";
-        myPassword = "";
         // assign clicked to 1.
         myClicked = 1;
         // call the addingListenersToSearchPanel method.
@@ -119,7 +115,6 @@ public class  Controller{
                         // pass the username and password information to the login class.
                         login = new Login(myLoginPanel.getUsername(), myLoginPanel.getPassword());
                         myUsername = myLoginPanel.getUsername();
-                        myPassword = myLoginPanel.getPassword();
                     } catch (ClassNotFoundException ex) {
                         throw new RuntimeException(ex);
                     }

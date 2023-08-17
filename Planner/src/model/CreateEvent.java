@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 /**
  * This class create Event for each table.
