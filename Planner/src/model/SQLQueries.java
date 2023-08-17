@@ -166,8 +166,7 @@ public class SQLQueries {
                     " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
                     " WHERE prio >= ? AND username IN (SELECT username " +
                     " FROM event_table " +
-                    " WHERE username = ? AND due_date >= ?" +
-                    " GROUP BY  assignment_id) ";
+                    " WHERE username = ? AND due_date >= ?);";
 
 
             PreparedStatement checkStatement = connection.prepareStatement(query);
@@ -193,12 +192,12 @@ public class SQLQueries {
         return res;
     }
 
-    public ArrayList<Object[]> searchByProfessor(String theProfLastName, Date theStartDate, Date theEndDate) throws SQLException {
+    public ArrayList<Object[]> searchByProfessor(String theUsername, String theProfLastName, Date theStartDate, Date theEndDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             String query = "SELECT assignment_id, title FROM (SELECT * FROM ( " + ServerData.EVENT_TABLE + "" +
                     " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE + " NATURAL JOIN " + ServerData.PROF_TABLE + ")) AS A " +
-                    " WHERE A.Lname = ? AND  A.due_date >= ? AND " +
+                    " WHERE A.Lname = ? AND  A.due_date >= ? AND A.username = ? AND " +
                     " EXISTS (SELECT * " +
                     " FROM (SELECT * FROM ( " + ServerData.EVENT_TABLE  +
                     " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
@@ -209,8 +208,9 @@ public class SQLQueries {
             PreparedStatement checkStatement = connection.prepareStatement(query);
             checkStatement.setString(1, theProfLastName);
             checkStatement.setDate(2, theStartDate);
-            checkStatement.setString(3, theProfLastName);
-            checkStatement.setDate(4, theEndDate);
+            checkStatement.setString(3, theUsername);
+            checkStatement.setString(4, theProfLastName);
+            checkStatement.setDate(5, theEndDate);
 
             ResultSet resultSet = checkStatement.executeQuery();
 
@@ -236,7 +236,8 @@ public class SQLQueries {
             String query = "SELECT title, TIMEDIFF(end_time, start_time) AS total_time " +
                     " FROM " + ServerData.EVENT_TABLE + " NATURAL JOIN " + ServerData.TIME_TABLE + " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
                     " WHERE username = ? " +
-                    " AND due_date >= ? AND due_date <= ?;";
+                    " AND due_date >= ? AND due_date <= ? " +
+                    " ORDER BY due_date;";
 
 
             PreparedStatement checkStatement = connection.prepareStatement(query);
@@ -267,7 +268,7 @@ public class SQLQueries {
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             String query = "SELECT assignment_id, title, Fname, Lname " +
                     " FROM " + ServerData.EVENT_TABLE + " NATURAL JOIN " + ServerData.PROF_TABLE + " NATURAL JOIN " + ServerData.ASSIGNMENT_DETAIL_TABLE +
-                    " WHERE completed = 1 AND due_date > ? AND due_date < ? AND username = ?;";
+                    " WHERE completed = 1 AND due_date >= ? AND due_date <= ? AND username = ?;";
 
 
             PreparedStatement checkStatement = connection.prepareStatement(query);
@@ -431,7 +432,7 @@ public class SQLQueries {
     }
 
 
-    public ArrayList<Object[]> SearchAssignmentTookLongerThanAvg() throws SQLException {
+    public ArrayList<Object[]> SearchAssignmentTookLongerThanAvg(String theUsername) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             String query = "SELECT E.Assignment_id, E.title, P.Fname, P.Lname, (TIMEDIFF(T.end_time, T.start_time)) AS time_spent " +
@@ -445,12 +446,14 @@ public class SQLQueries {
                     "    WHERE T1.end_time IS NOT NULL " +
                     "    GROUP BY P1.Fname, P1.Lname " +
                     " ) AS ProfessorAvgTime " +
-                    " WHERE T.end_time IS NOT NULL " +
+                    " WHERE T.end_time IS NOT NULL AND username = ? " +
                     " AND TIME_TO_SEC(TIMEDIFF(T.end_time, T.start_time)) > ProfessorAvgTime.avg_time " +
                     " ORDER BY Lname, Fname";
 
 
             PreparedStatement checkStatement = connection.prepareStatement(query);
+
+            checkStatement.setString(1, theUsername);
 
             ResultSet resultSet = checkStatement.executeQuery();
 

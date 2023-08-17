@@ -13,8 +13,6 @@ public class EventCreatingFrame {
     private JTextField dueDateField;
     private JTextField professorFirstNameField;
     private JTextField professorLastNameField;
-    private JTextField startTimeField;
-    private JTextField endTimeField;
 
 
     private boolean myOkayPressed;
@@ -30,7 +28,6 @@ public class EventCreatingFrame {
 
     public EventCreatingFrame() {
         myPanel = new JPanel(new GridBagLayout());
-
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(10, 10, 10, 10);
@@ -56,31 +53,17 @@ public class EventCreatingFrame {
         professorLastNameLabel.setFont(font);
         professorLastNameField = new JTextField(20);
 
-        JLabel startTimeLabel = new JLabel("Start Time Label:");
-        startTimeLabel.setFont(font);
-        startTimeField = new JTextField(20);
-
-        JLabel endTimeLabel = new JLabel("End Time Label:");
-        endTimeLabel.setFont(font);
-        endTimeField = new JTextField(20);
 
         myOkButton =  new JButton("Ok");
 
-//            myOkButton.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(final ActionEvent e) {
-//                    myOkayPressed = true;
-//                }
-//            });
 
         // Set preferred size for labels to control their width
         Dimension labelSize = new Dimension(215, 30);
         titleLabel.setPreferredSize(labelSize);
         assignmentPriorityLabel.setPreferredSize(labelSize);
+        dueDateLabel.setPreferredSize(labelSize);
         professorFirstNameLabel.setPreferredSize(labelSize);
         professorLastNameLabel.setPreferredSize(labelSize);
-        startTimeLabel.setPreferredSize(labelSize);
-        endTimeLabel.setPreferredSize(labelSize);
 
         // Add components using GridBagConstraints
         constraints.gridx = 0;
@@ -124,23 +107,7 @@ public class EventCreatingFrame {
         myPanel.add(professorLastNameField, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 5;
-        myPanel.add(startTimeLabel, constraints);
-
-        constraints.gridx = 1;
-        constraints.gridy = 5;
-        myPanel.add(startTimeField, constraints);
-
-        constraints.gridx = 0;
         constraints.gridy = 6;
-        myPanel.add(endTimeLabel, constraints);
-
-        constraints.gridx = 1;
-        constraints.gridy = 6;
-        myPanel.add(endTimeField, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 7;
         constraints.gridwidth = 2; // Full width for the button panel
 
         constraints.fill = GridBagConstraints.HORIZONTAL; // Make the panel fill horizontally
@@ -158,7 +125,12 @@ public class EventCreatingFrame {
         myFrame.setPreferredSize(new Dimension(600, 500));
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myFrame.pack();
+        ImageIcon icon = new ImageIcon("./up.png");
+        Image largeImage = icon.getImage().getScaledInstance(15, -1,
+                java.awt.Image.SCALE_SMOOTH);
+        // Set the icon for the JFrame
 
+        myFrame.setIconImage(largeImage);
       // Center the JFrame on the screen
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int centerX = (screenSize.width - myFrame.getWidth()) / 2;
@@ -193,12 +165,6 @@ public class EventCreatingFrame {
         return new java.sql.Date(parsedDate.getTime());
     }
 
-    public java.sql.Time getStartTimeField() throws ParseException {
-        return formatStringToSQLTime(startTimeField.getText());
-    }
-    public java.sql.Time getEndTimeField() throws ParseException {
-        return formatStringToSQLTime(endTimeField.getText());
-    }
 
     public java.sql.Time formatStringToSQLTime(String strTime) throws ParseException {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");

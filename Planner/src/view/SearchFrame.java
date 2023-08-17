@@ -27,7 +27,7 @@ public class SearchFrame {
 
     private JPanel myPanel;
     public SearchFrame() {
-        myFrame = new JFrame("Add");
+        myFrame = new JFrame("Search");
         myOkButton =  new JButton("Ok");
         myPanel = new JPanel();
         //JPanel buttonPanel = new JPanel();
@@ -93,6 +93,12 @@ public class SearchFrame {
 
 
         myFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        ImageIcon icon = new ImageIcon("./up.png");
+        Image largeImage = icon.getImage().getScaledInstance(15, -1,
+                java.awt.Image.SCALE_SMOOTH);
+        // Set the icon for the JFrame
+
+        myFrame.setIconImage(largeImage);
 
         myFrame.pack();
         myFrame.setVisible(true);

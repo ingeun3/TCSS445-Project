@@ -12,7 +12,7 @@ public class CreateEvent {
     private ArrayList<String> myEvent = new ArrayList<String>();
     private ArrayList<String> myEventDueDate = new ArrayList<String>();
 
-    public CreateEvent(String theUsername, String theTitle, Date theDate, String theProfFName, String theProfLName, int thePrio, Time theStart, Time theEnd) throws ClassNotFoundException {
+    public CreateEvent(String theUsername, String theTitle, Date theDate, String theProfFName, String theProfLName, int thePrio)   {
 //        Class.forName("com.mysql.jdbc.Driver");
         myUsername = theUsername;
 
@@ -24,7 +24,7 @@ public class CreateEvent {
         insertEvent(theTitle);
         insertAssignmentDetail(thePrio, theDate);
         insertProfessor(theProfFName,theProfLName);
-        insertTime(theStart, theEnd);
+        insertTime();
 
     }
 
@@ -93,13 +93,11 @@ public class CreateEvent {
         }
     }
 
-    private void insertTime(Time theStart, Time theEnd) {
+    private void insertTime() {
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
-            String insertQuery = "INSERT INTO " + ServerData.TIME_TABLE +"(assignment_id, start_time, end_time ) VALUES (?,?,?)";
+            String insertQuery = "INSERT INTO " + ServerData.TIME_TABLE +"(assignment_id) VALUES (?)";
             PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
             insertStatement.setInt(1, myAssignmentID);
-            insertStatement.setTime(2,  theStart);
-            insertStatement.setTime(3, theEnd);
 
             int rowsAffected = insertStatement.executeUpdate();
 
