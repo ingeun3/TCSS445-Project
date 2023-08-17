@@ -165,9 +165,9 @@ public class EventCreatingFrame {
         return convertStringToSqlDate(dateString);
     }
     /** converts string input into SQL date format */
-    public static java.sql.Date convertStringToSqlDate(String strDate) throws ParseException {
+    public static java.sql.Date convertStringToSqlDate(final String theStringDate) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-        java.util.Date parsedDate = dateFormat.parse(strDate);
+        java.util.Date parsedDate = dateFormat.parse(theStringDate);
         return new java.sql.Date(parsedDate.getTime());
     }
     /** Getter for Ok button. */

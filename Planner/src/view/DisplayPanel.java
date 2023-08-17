@@ -21,10 +21,10 @@ public class DisplayPanel extends JTable {
 
     /**
      * The Default constructor for DisplayPanel object.
-     * @param SQLData The List of data from database
+     * @param theSQLData The List of data from database
      * @param theType The type of JTable to display.
      */
-    public DisplayPanel(ArrayList<Object[]> SQLData, int theType) {
+    public DisplayPanel(final ArrayList<Object[]> theSQLData, final int theType) {
         super();
         if(theType == 1) {
             columnNames = new String[]{"Assignment ID", "Title", "Due Date", "Priority", "Professor First Name", "Professor Last Name", "Start", "End", "Complete"};
@@ -47,9 +47,9 @@ public class DisplayPanel extends JTable {
         }
 
         // Convert the ArrayList to a 2D array
-        Object[][] data = new Object[SQLData.size()][];
-        for (int i = 0; i < SQLData.size(); i++) {
-            data[i] = SQLData.get(i);
+        Object[][] data = new Object[theSQLData.size()][];
+        for (int i = 0; i < theSQLData.size(); i++) {
+            data[i] = theSQLData.get(i);
         }
 
         myModel = new DefaultTableModel(data, columnNames) {

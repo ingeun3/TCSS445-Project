@@ -16,18 +16,6 @@ public class CreateEvent {
     // initialized myAssignmentID.
     private int myAssignmentID;
 
-    // initialized the ArrayList for myEventTitles.
-    private ArrayList<String> myEventTitles = new ArrayList<String>();
-
-    // initialized the ArrayList for myEventPriority.
-    private ArrayList<Integer> myEventPrio = new ArrayList<Integer>();
-
-    // initialized the ArrayList for myEvent.
-    private ArrayList<String> myEvent = new ArrayList<String>();
-
-    // initialized the ArrayList for myEventDueDate.
-    private ArrayList<String> myEventDueDate = new ArrayList<String>();
-
     /**
      * This is the constructor for create Event.
      * @param theUsername  username.
@@ -60,6 +48,7 @@ public class CreateEvent {
             insertStatement.setString(1, myUsername);
             insertStatement.setString(2, theTitle);
             insertStatement.setInt(3, myAssignmentID);
+            insertStatement.executeUpdate();
             insertStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,6 +67,7 @@ public class CreateEvent {
             insertStatement.setInt(1, myAssignmentID);
             insertStatement.setInt(2, thePrio);
             insertStatement.setDate(3, theDate);
+            insertStatement.executeUpdate();
             insertStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,6 +88,7 @@ public class CreateEvent {
             insertStatement.setInt(1, myAssignmentID);
             insertStatement.setString(2,  theProfessorFName);
             insertStatement.setString(3,  theProfessorLName);
+            insertStatement.executeUpdate();
             insertStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -112,6 +103,7 @@ public class CreateEvent {
             String insertQuery = "INSERT INTO " + ServerData.TIME_TABLE +"(assignment_id) VALUES (?)";
             PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
             insertStatement.setInt(1, myAssignmentID);
+            insertStatement.executeUpdate();
             insertStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();

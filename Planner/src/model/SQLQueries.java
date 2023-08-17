@@ -32,7 +32,7 @@ public class SQLQueries {
      * This method delete the information from the SQL.
      * @param theAssignmentID theAssignmentID.
      */
-    public void deleteRow(Object theAssignmentID) {
+    public void deleteRow(final Object theAssignmentID) {
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             String query = "DELETE FROM " + ServerData.EVENT_TABLE +
                     " WHERE assignment_id = ?";
@@ -57,7 +57,7 @@ public class SQLQueries {
      * @param theCol           the column
      * @param theNewValue      the Row
      */
-    public void editRow(Object theAssignmentID, int theCol, Object theNewValue) {
+    public void editRow(final Object theAssignmentID, final int theCol, final  Object theNewValue) {
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             String attribute = "";
             if(theCol == 1) {
@@ -134,7 +134,7 @@ public class SQLQueries {
      * @return        retrieve information from SQL.
      * @throws SQLException
      */
-    public ArrayList<Object[]> searchDefault(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+    public ArrayList<Object[]> searchDefault(final String theUsername, final Date theStartDate, final Date theEndDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME,
                 ServerData.DB_PASSWORD)) {
@@ -176,7 +176,7 @@ public class SQLQueries {
      * @return   retrieve information from SQL.
      * @throws SQLException
      */
-    public ArrayList<Object[]> searchByPriority(String theUsername, int thePriority, Date theDueDate) throws SQLException {
+    public ArrayList<Object[]> searchByPriority(final String theUsername, final int thePriority, final Date theDueDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME,
                 ServerData.DB_PASSWORD)) {
@@ -214,7 +214,7 @@ public class SQLQueries {
      * @throws SQLException
      */
 
-    public ArrayList<Object[]> searchByProfessor(String theUsername, String theProfLastName, Date theStartDate, Date theEndDate) throws SQLException {
+    public ArrayList<Object[]> searchByProfessor(final String theUsername, final String theProfLastName, final Date theStartDate, final Date theEndDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME,
                 ServerData.DB_PASSWORD)) {
@@ -255,7 +255,7 @@ public class SQLQueries {
      * @return        retrieve information from SQL.
      * @throws SQLException
      */
-    public ArrayList<Object[]> searchByTimeSpentOnAssignment(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+    public ArrayList<Object[]> searchByTimeSpentOnAssignment(final String theUsername, final Date theStartDate, final Date theEndDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME,
                 ServerData.DB_PASSWORD)) {
@@ -292,7 +292,7 @@ public class SQLQueries {
      * @return        retrieve information from SQL.
      * @throws SQLException
      */
-    public ArrayList<Object[]> searchCompletedAssignment(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+    public ArrayList<Object[]> searchCompletedAssignment(final String theUsername, final Date theStartDate, final Date theEndDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME,
                 ServerData.DB_PASSWORD)) {
@@ -327,7 +327,7 @@ public class SQLQueries {
      * @return        retrieve information from SQL.
      * @throws SQLException
      */
-    public ArrayList<Object[]> searchByTotalTimeSpent(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+    public ArrayList<Object[]> searchByTotalTimeSpent(final String theUsername, final Date theStartDate, final Date theEndDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME,
                 ServerData.DB_PASSWORD)) {
@@ -361,7 +361,7 @@ public class SQLQueries {
      * @return        retrieve information from SQL.
      * @throws SQLException
      */
-    public ArrayList<Object[]> searchNumberOfAssignment(String theUsername, Date theStartDate, Date theEndDate) throws SQLException {
+    public ArrayList<Object[]> searchNumberOfAssignment(final String theUsername, final Date theStartDate, final Date theEndDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME,
                 ServerData.DB_PASSWORD)) {
@@ -409,7 +409,7 @@ public class SQLQueries {
      * @return        retrieve information from SQL.
      * @throws SQLException
      */
-    public ArrayList<Object[]> minimizeView(String theUsername, Date theStartDate) throws SQLException {
+    public ArrayList<Object[]> minimizeView(final String theUsername, final Date theStartDate) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             String query = "SELECT A.assignment_id, title, prio, due_date " +
@@ -420,7 +420,8 @@ public class SQLQueries {
                     " SELECT A.assignment_id, title, prio, due_date " +
                     " FROM " + ServerData.EVENT_TABLE + " E " +
                     " RIGHT JOIN assignment_detail_table A ON E.assignment_id = A.assignment_id" +
-                    " WHERE E.username = ? AND A.due_date >= ?";
+                    " WHERE E.username = ? AND A.due_date >= ?" +
+                    " ORDER BY due_date";
             PreparedStatement checkStatement = connection.prepareStatement(query);
             checkStatement.setString(1, theUsername);
             checkStatement.setDate(2, theStartDate);
@@ -478,7 +479,7 @@ public class SQLQueries {
      * @return        retrieve information from SQL.
      * @throws SQLException
      */
-    public ArrayList<Object[]> SearchAssignmentTookLongerThanAvg(String theUsername) throws SQLException {
+    public ArrayList<Object[]> SearchAssignmentTookLongerThanAvg(final String theUsername) throws SQLException {
         ArrayList<Object[]> res = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME,
                 ServerData.DB_PASSWORD)) {

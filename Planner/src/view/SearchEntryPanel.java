@@ -25,7 +25,7 @@ public class SearchEntryPanel {
      * @param theFirstEntry The user input for first entry.
      * @param theLabel The label of the search
      */
-    public SearchEntryPanel(String theFirstEntry, String theLabel) {
+    public SearchEntryPanel(final String theFirstEntry, final String theLabel) {
         myPanel = new JPanel(new GridBagLayout());
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -75,7 +75,7 @@ public class SearchEntryPanel {
      * @param theSecondEntry The user input for second entry
      * @param theLabel The label of the search
      */
-    public SearchEntryPanel(String theFirstEntry, String theSecondEntry, String theLabel) {
+    public SearchEntryPanel(final String theFirstEntry, final String theSecondEntry, final String theLabel) {
         myPanel = new JPanel(new GridBagLayout());
 
         GridBagConstraints constraints = new GridBagConstraints();
@@ -138,7 +138,7 @@ public class SearchEntryPanel {
      * @param theThirdEntry The user input for third entry.
      * @param theLabel The label for search.
      */
-    public SearchEntryPanel(String theFirstEntry, String theSecondEntry, String theThirdEntry, String theLabel) {
+    public SearchEntryPanel(final String theFirstEntry, final String theSecondEntry, final String theThirdEntry, final String theLabel) {
         myPanel = new JPanel(new GridBagLayout());
 
         GridBagConstraints constraints = new GridBagConstraints();

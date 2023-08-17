@@ -22,15 +22,6 @@ import java.util.ArrayList;
  * @author Ingeun Hwang, Khin Win
  */
 public class  Controller{
-    // initialized myLoginFlag.
-    private boolean myLoginFlag;
-
-    // initialized myMainPanelFlag.
-    private boolean myMainPanelFlag;
-
-    // initialized myCreateAccountFlag.
-    private boolean myCreateAccountFlag;
-
     // initialized myFrame.
     private GUIFrame myFrame;
 
@@ -84,7 +75,6 @@ public class  Controller{
         // assign SearchEntryPanel to myEntry.
         myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : ");
         // assign myLoginFlag to true.
-        myLoginFlag = true;
         // set the LoginPanel to the center of the frame.
         myFrame.setCenter(myLoginPanel);
         // assign MenuBar to myMenuBar.
@@ -111,11 +101,8 @@ public class  Controller{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Perform Login action here when the "Ok" button is clicked
-                myLoginFlag = false;
                 // set the CreateAccountPanel into GUI Frame.
                 myFrame.setCenter(myCreateAccountPanel);
-                // reset the Flag.
-                myCreateAccountFlag = true;
                 //remove all the buttons.
                 myLoginPanel.getCreateNewButton().removeAll();
             }
@@ -200,9 +187,11 @@ public class  Controller{
                         public void actionPerformed(ActionEvent e) {
                             try {
                                 // pass all the information to the CreateEvent class.
-                                CreateEvent newEvent = new CreateEvent(myUsername, event.getTitleField().getText(), event.getDueDate(),
+                                new CreateEvent(myUsername, event.getTitleField().getText(), event.getDueDate(),
                                         event.getProfessorFirstNameField().getText(),
                                         event.getProfessorLastNameField().getText(), Integer.parseInt(event.getAssignmentPriorityField().getText()));
+
+
                                 // load the Jtable.
                                 loadJTable();
                                 // dispose it.
@@ -249,7 +238,7 @@ public class  Controller{
         });
 
         // get action listener for edit button.
-        myMenuBar.getMyEditButton().addActionListener(new ActionListener() {
+        myMenuBar.getMyApplyChangeButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(clicked % 2 == 1) {
@@ -515,9 +504,7 @@ public class  Controller{
             } else if (newUser.getMyOutput() == 2) {
                 JOptionPane.showMessageDialog(myFrame,
                         "Account created successfully!");
-                myLoginFlag = true;
                 myFrame.setCenter(myLoginPanel);
-                myCreateAccountFlag = false;
                 myCreateAccountPanel.getOkButton().removeAll();
             } else {
                 JOptionPane.showMessageDialog(myFrame,
@@ -551,11 +538,9 @@ public class  Controller{
             throw new RuntimeException(ex);
         }
         myMainPanel = new DisplayPanel(myData, 1);
-        myLoginFlag = false;
          myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();
         myFrame.setNorthPanel(myMenuBar);
-        myMainPanelFlag = true;
 
     }
 
@@ -572,11 +557,9 @@ public class  Controller{
             throw new RuntimeException(ex);
         }
         myMainPanel = new DisplayPanel(myData, 1);
-        myLoginFlag = false;
         myFrame.setCenter(myMainPanel.getMyScrollPane());
         myLoginPanel.getOkButton().removeAll();
         myFrame.setNorthPanel(myMenuBar);
-        myMainPanelFlag = true;
     }
 
     /**

@@ -108,7 +108,7 @@ public class SearchFrame {
         myFrame.setVisible(true);
     }
     /** Set new GUI component in the center of the frame. */
-    public void setCenter (JPanel theEntry) {
+    public void setCenter (final JPanel theEntry) {
         myFrame.getContentPane().remove(myPanel);
         myPanel = theEntry;
         myFrame.add(theEntry, BorderLayout.CENTER);

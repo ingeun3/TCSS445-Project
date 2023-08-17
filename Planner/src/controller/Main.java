@@ -1,5 +1,5 @@
 package controller;
-/*
+/**
  *
  * This class is the main class that start the controller.
  *

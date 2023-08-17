@@ -17,7 +17,7 @@ public class NewUser {
      * @param thePassword  the password.
      * @throws ClassNotFoundException
      */
-    public NewUser(String theUsername, String thePassword) throws ClassNotFoundException {
+    public NewUser(final String theUsername, final String thePassword) {
         createUser(theUsername, thePassword);
     }
 
@@ -27,7 +27,7 @@ public class NewUser {
      * @param thePassword  password.
      * @throws ClassNotFoundException
      */
-    private void createUser(String theUsername, String thePassword) throws ClassNotFoundException {
+    private void createUser(final String theUsername, final String thePassword) {
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             // Check if the username already exists
             String checkQuery = "SELECT COUNT(*) FROM user_table WHERE username = ?";
