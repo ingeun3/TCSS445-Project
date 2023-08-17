@@ -25,7 +25,8 @@ public class CreateEvent {
      * @param theProfLName  professor Last Name.
      * @param thePrio       priority of the assignment.
      */
-    public CreateEvent(String theUsername, String theTitle, Date theDate, String theProfFName, String theProfLName, int thePrio)   {
+    public CreateEvent(final String theUsername, final String theTitle, final Date theDate,
+                       final String theProfFName, final String theProfLName, final int thePrio)   {
         myUsername = theUsername;
         int lastUsedAssignmentID = new SQLQueries().getLastUsedAssignmentID();
         // Increment the assignment ID for the new instance
@@ -41,7 +42,7 @@ public class CreateEvent {
      * @param theTitle the title of the assignment.
      */
 
-    private void insertEvent(String theTitle) {
+    private void insertEvent(final String theTitle) {
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             String insertQuery = "INSERT INTO " + ServerData.EVENT_TABLE +"(username, title, assignment_id ) VALUES (?,?,?)";
             PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
@@ -60,7 +61,7 @@ public class CreateEvent {
      * @param thePrio  the Prority of the Assignment.
      * @param theDate  the Due Date of the assignment.
      */
-    private void insertAssignmentDetail(int thePrio, Date theDate) {
+    private void insertAssignmentDetail(final int thePrio, final Date theDate) {
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME, ServerData.DB_PASSWORD)) {
             String insertQuery = "INSERT INTO " + ServerData.ASSIGNMENT_DETAIL_TABLE +"(assignment_id, prio, due_date ) VALUES (?,?,?)";
             PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
@@ -79,7 +80,7 @@ public class CreateEvent {
      * @param theProfessorFName  the Professor First Name.
      * @param theProfessorLName  the Professor Last Name.
      */
-    private void insertProfessor(String theProfessorFName, String theProfessorLName) {
+    private void insertProfessor(final String theProfessorFName, final String theProfessorLName) {
         try (Connection connection = DriverManager.getConnection(ServerData.DB_URL, ServerData.DB_USERNAME,
                 ServerData.DB_PASSWORD)) {
             String insertQuery = "INSERT INTO " + ServerData.PROF_TABLE +
