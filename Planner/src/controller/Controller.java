@@ -65,7 +65,8 @@ public class  Controller{
     private int mySearchType;
 
     // initialized int value clicked.
-    private int clicked;
+    private int myClicked;
+
 
     /**
      * This is the constructor for Controller Class.
@@ -93,7 +94,7 @@ public class  Controller{
         myUsername = "";
         myPassword = "";
         // assign clicked to 1.
-        clicked = 1;
+        myClicked = 1;
         // call the addingListenersToSearchPanel method.
         addingListenersToSearchPanel();
         // call the start method.
@@ -120,14 +121,12 @@ public class  Controller{
                 myLoginPanel.getCreateNewButton().removeAll();
             }
         });
-
-
         myLoginPanel.getOkButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Perform Login action here when the "Ok" button is clicked
                 // if user clicks one time then call the 'if' statement.
-                if (clicked % 2 == 1) {
+                if (myClicked % 2 == 1) {
                     Login login; // initialized the Login class.
                     try {
                         // pass the username and password information to the login class.
@@ -145,9 +144,9 @@ public class  Controller{
                         // otherwise, load the JTable.
                         loadJTable();
                     }
-                    clicked++;
+                    myClicked++;
                 } else {
-                    clicked++;
+                    myClicked++;
                 }
                 // remove all buttons.
                 myLoginPanel.getOkButton().removeAll();
@@ -167,7 +166,6 @@ public class  Controller{
                 } catch (ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
-
             }
         });
 
@@ -176,11 +174,11 @@ public class  Controller{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // if user click once then load the JTable.
-                if (clicked % 2 == 1) {
+                if (myClicked % 2 == 1) {
                     loadJTable();
-                    clicked++;
+                    myClicked++;
                 } else {
-                    clicked++;
+                    myClicked++;
                 }
             }
         });
@@ -190,7 +188,7 @@ public class  Controller{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // if user click once then call EventCreatingFrame class.
-                if (clicked % 2 == 1) {
+                if (myClicked % 2 == 1) {
                     // initialized it.
                     EventCreatingFrame event = new EventCreatingFrame();
 
@@ -212,9 +210,9 @@ public class  Controller{
                             }
                         }
                     });
-                    clicked++;
+                    myClicked++;
                 } else {
-                    clicked++;
+                    myClicked++;
                 }
             }
         });
@@ -225,7 +223,7 @@ public class  Controller{
             // if user click once then call the 'if' statement.
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(clicked % 2 == 1) {
+                if(myClicked % 2 == 1) {
                     // get selected row information from Table.
                     int selectedRow = myMainPanel.getTable().getSelectedRow();
                     // get an information from the row that user selected.
@@ -241,9 +239,9 @@ public class  Controller{
                         // if user cannot remove successfully then pop up the Joption Pane.
                         JOptionPane.showMessageDialog(myFrame, "Please select a row to delete.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                    clicked++;
+                    myClicked++;
                 } else {
-                    clicked++;
+                    myClicked++;
                 }
             }
         });
@@ -252,7 +250,7 @@ public class  Controller{
         myMenuBar.getMyEditButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(clicked % 2 == 1) {
+                if(myClicked % 2 == 1) {
                     // if user click once then get information about selectedRow and Column.
                     int selectedRow = myMainPanel.getTable().getSelectedRow();
                     int selectedColumn = myMainPanel.getTable().getSelectedColumn();
@@ -266,9 +264,9 @@ public class  Controller{
                     }
                     // refresh and show the Table again.
                     loadJTable();
-                    clicked++;
+                    myClicked++;
                 } else {
-                    clicked++;
+                    myClicked++;
                 }
             }
         });
@@ -278,7 +276,7 @@ public class  Controller{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // if user click once then
-                if (clicked % 2 == 1) {
+                if (myClicked % 2 == 1) {
                     // assign the information to the myEntry.
                     myEntry = new SearchEntryPanel("Start Date (yyyy-mm-dd) : ", "End Date (yyyy-mm-dd) : ",
                             "Default Search");
@@ -292,7 +290,7 @@ public class  Controller{
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             // see user click once or not.
-                            if (clicked % 2 == 1) {
+                            if (myClicked % 2 == 1) {
 
                             try {
                                 // if search type is equal to 1 then
@@ -337,15 +335,15 @@ public class  Controller{
                             } catch (Exception ex) {
                                 throw new RuntimeException(ex);
                             }
-                            clicked++;
+                            myClicked++;
                             } else {
-                                clicked++;
+                                myClicked++;
                             }
                         }
                     });
-                    clicked++;
+                    myClicked++;
                 } else {
-                    clicked++;
+                    myClicked++;
                 }
             }
         });
@@ -485,15 +483,15 @@ public class  Controller{
 
     /**
      * This method convert String to SQL Date.
-     * @param strDate theStartDate
+     * @param theStrDate theStartDate
      * @return the SQL Date
      * @throws ParseException
      */
-    public static java.sql.Date convertStringToSqlDate(String strDate) throws ParseException {
+    public static java.sql.Date convertStringToSqlDate(final String theStrDate) throws ParseException {
         // give the Format for date.
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         // changed into Java Date.
-        java.util.Date parsedDate = dateFormat.parse(strDate);
+        java.util.Date parsedDate = dateFormat.parse(theStrDate);
         // return as a SQL Date.
         return new java.sql.Date(parsedDate.getTime());
     }
@@ -506,7 +504,7 @@ public class  Controller{
         // pass the information into the New User class.
         NewUser newUser = new NewUser(myCreateAccountPanel.getUsername(), myCreateAccountPanel.getPassword());
         // if user click once then
-        if (clicked % 2 == 1) {
+        if (myClicked % 2 == 1) {
             if (newUser.getMyOutput() == 1) {
                 // if output equal to 1 then show JOptionPane
                 JOptionPane.showMessageDialog(myFrame,
@@ -523,10 +521,10 @@ public class  Controller{
                 JOptionPane.showMessageDialog(myFrame,
                         "Account failed to create");
             }
-            clicked++;
+            myClicked++;
 
         } else {
-            clicked++;
+            myClicked++;
         }
 
     }
@@ -565,7 +563,7 @@ public class  Controller{
      * @param theEnd   theEnd Date.
      */
 
-    private void loadDefaultJTableOnSearch(Date theStart, Date theEnd) {
+    private void loadDefaultJTableOnSearch(final Date theStart, final Date theEnd) {
         try {
             myData = new SQLQueries().searchDefault(myUsername,  theStart, theEnd);
         } catch (SQLException ex) {
@@ -584,7 +582,7 @@ public class  Controller{
      * @param thePriority  thePriority of the assignment.
      * @param theStart     theStart Date.
      */
-    private void loadJTableOnPrioritySearch(int thePriority, Date theStart) {
+    private void loadJTableOnPrioritySearch(final int thePriority, final Date theStart) {
         try {
             myData = new SQLQueries().searchByPriority(myUsername, thePriority,theStart);
         } catch (SQLException ex) {
@@ -602,7 +600,7 @@ public class  Controller{
      * @param theStart   TheStart Date.
      * @param theEnd     TheEnd Date.
      */
-    private void loadJTableOnProfessorSearch(String theProfLastName, Date theStart, Date theEnd) {
+    private void loadJTableOnProfessorSearch(final String theProfLastName, final Date theStart, final Date theEnd) {
         try {
             myData = new SQLQueries().searchByProfessor(myUsername, theProfLastName, theStart, theEnd);
         } catch (SQLException ex) {
@@ -619,7 +617,7 @@ public class  Controller{
      * @param theStart  theStartDate.
      * @param theEnd    theEndDate.
      */
-    private void loadJTableOnTimeSearch(Date theStart, Date theEnd) {
+    private void loadJTableOnTimeSearch(final Date theStart, final Date theEnd) {
         try {
             myData = new SQLQueries().searchByTimeSpentOnAssignment(myUsername, theStart, theEnd);
         } catch (SQLException ex) {
@@ -637,7 +635,7 @@ public class  Controller{
      * @param theEnd    theEndDate.
      */
 
-    private void loadJTableOnCompleteSearch(Date theStart, Date theEnd) {
+    private void loadJTableOnCompleteSearch(final Date theStart,final Date theEnd) {
         try {
             myData = new SQLQueries().searchCompletedAssignment(myUsername, theStart, theEnd);
         } catch (SQLException ex) {
@@ -654,7 +652,7 @@ public class  Controller{
      * @param theStart  theStartDate.
      * @param theEnd    theEndDate.
      */
-    private void loadJTableOnTotalTimeSearch(Date theStart, Date theEnd) {
+    private void loadJTableOnTotalTimeSearch(final Date theStart,final Date theEnd) {
         try {
             myData = new SQLQueries().searchByTotalTimeSpent(myUsername, theStart, theEnd);
         } catch (SQLException ex) {
@@ -671,7 +669,7 @@ public class  Controller{
      * @param theStart  theStartDate.
      * @param theEnd    theEndDate.
      */
-    private void loadJTableOnTotalAssignmentCount(Date theStart, Date theEnd) {
+    private void loadJTableOnTotalAssignmentCount(final Date theStart,final Date theEnd) {
         try {
             myData = new SQLQueries().searchNumberOfAssignment(myUsername, theStart, theEnd);
         } catch (SQLException ex) {
